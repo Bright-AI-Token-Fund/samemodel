@@ -1,0 +1,45 @@
+name: Measurement report
+description: Share what samemodel measured on your engine, backend and hardware
+labels: [measurement]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Results differ by engine, backend, quantisation and CPU architecture, so
+        measurements from setups we cannot test are welcome. Please include enough
+        detail for someone else to repeat the run.
+  - type: input
+    id: engine
+    attributes:
+      label: Engine, version and backend
+      placeholder: llama.cpp b12244, CUDA 12.8
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware
+      placeholder: RTX 4090, Ryzen 9 7950X
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model and quantisation
+      placeholder: Qwen2.5-7B-Instruct Q4_K_M (file name and where it came from)
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Server command and samemodel command
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: samemodel output
+      render: text
+    validations:
+      required: true

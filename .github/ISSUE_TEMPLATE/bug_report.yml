@@ -1,0 +1,34 @@
+name: Bug report
+description: samemodel crashed, mis-parsed a response, or reported something wrong
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: The command you ran and its full output. Remove API keys.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: engine
+    attributes:
+      label: Inference engine and version
+      placeholder: llama.cpp b12244, vLLM 0.33.0, mlx-lm 0.32.2, ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: samemodel version
+      placeholder: output of `samemodel --version`
+    validations:
+      required: true
+  - type: textarea
+    id: response
+    attributes:
+      label: One raw response from the endpoint (optional)
+      description: >
+        If the problem is how a response was read, paste the JSON of one
+        /v1/chat/completions response with logprobs enabled.
+      render: json
