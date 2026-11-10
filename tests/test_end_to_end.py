@@ -22,14 +22,17 @@ def run_selfcheck(n=12, max_tokens=48, **server):
 
 def test_stable_endpoint_is_identical_everywhere():
     rows = run_selfcheck()
-    assert [verdict(c) for c in rows.values()] == ["identical", "identical"]
-    assert rows["cache reuse"].cache_hit_ratio == 1.0
-    assert rows["cache reuse"].scratch_hit_ratio == 0.0
+    assert list(rows) == [checks.REUSE, checks.FIRST_LOADED, checks.REPEAT_LOADED]
+    assert [verdict(c) for c in rows.values()] == ["identical"] * 3
+    assert rows[checks.REUSE].prompts == 6 and rows[checks.FIRST_LOADED].prompts == 6
+    assert rows[checks.REPEAT_LOADED].prompts == 12
+    assert rows[checks.REUSE].cache_hit_ratio == 1.0
+    assert rows[checks.REUSE].scratch_hit_ratio == 0.0
 
 
 def test_cache_dependent_endpoint_is_caught_by_cache_reuse_only():
     rows = run_selfcheck(n=20, max_tokens=64, cache_drift=0.08)
-    repeat, busy = rows["cache reuse"], rows["co-batched x4"]
+    repeat, busy = rows[checks.REUSE], rows[checks.REPEAT_LOADED]
     assert verdict(repeat) == "drift"
     assert verdict(busy) == "identical"
     # each logit gets N(0, 0.08) noise, so the top-2 log-odds move by |N(0, 0.08*sqrt(2))|,
@@ -39,8 +42,9 @@ def test_cache_dependent_endpoint_is_caught_by_cache_reuse_only():
 
 def test_batch_dependent_endpoint_is_caught_by_cobatching_only():
     rows = run_selfcheck(n=20, max_tokens=64, batch_drift=0.08)
-    assert verdict(rows["cache reuse"]) == "identical"
-    assert verdict(rows["co-batched x4"]) == "drift"
+    assert verdict(rows[checks.REUSE]) == "identical"
+    assert verdict(rows[checks.FIRST_LOADED]) == "drift"      # the first request was the loaded one
+    assert verdict(rows[checks.REPEAT_LOADED]) == "drift"
 
 
 def test_tiny_drift_is_noise_and_large_drift_is_different():
@@ -50,7 +54,7 @@ def test_tiny_drift_is_noise_and_large_drift_is_different():
 
 def test_coarse_grid_is_reported():
     rows = run_selfcheck(cache_drift=0.08, resolution=1 / 16)
-    assert rows["cache reuse"].resolution == 1 / 16
+    assert rows[checks.REUSE].resolution == 1 / 16
 
 
 def test_endpoint_without_logprobs_falls_back_to_text():
@@ -60,7 +64,7 @@ def test_endpoint_without_logprobs_falls_back_to_text():
 
 def test_endpoint_without_token_ids_still_works():
     rows = run_selfcheck(n=20, max_tokens=64, cache_drift=0.08, token_ids=False)
-    assert verdict(rows["cache reuse"]) == "drift"
+    assert verdict(rows[checks.REUSE]) == "drift"
 
 
 def test_record_diff_and_exit_codes(tmp_path, capsys):
@@ -91,7 +95,8 @@ def test_selfcheck_cli_prints_cache_ratio(capsys):
     with MockServer(**FAST, batch_drift=0.08) as url:
         assert main(["selfcheck", "--base-url", url + "/v1", "-n", "8", "--max-tokens", "32"]) == 0
     out = capsys.readouterr().out
-    assert "co-batched x4" in out and "0% on the first request, 100% on the repeat" in out
+    assert "repeat under load" in out and "0% first request, 100% repeat" in out
+    assert "unique conversations" in out and "--shared-system" in out
 
 
 def test_unreachable_endpoint_is_a_clean_error(capsys):
@@ -111,3 +116,19 @@ def test_markers_differ_from_the_first_characters():
     assert len({m[:3] for m in marks}) > 40          # almost no shared prefix between prompts
     assert checks.marker("run1", "7") == checks.marker("run1", "7")
     assert checks.marker(None, "7") is None
+
+
+def test_shared_system_prompt_mode(capsys):
+    with MockServer(**FAST, cache_drift=0.08) as url:
+        assert main(["selfcheck", "--base-url", url, "-n", "8", "--max-tokens", "32",
+                     "--shared-system"]) == 0
+    out = capsys.readouterr().out
+    assert "shared system prompt" in out and "--shared-system to test" not in out
+
+
+def test_conversation_shapes():
+    system, user = checks.conversation("Hi", "run1", "3")
+    assert user == "Hi" and system.endswith(checks.SHARED_SYSTEM) and system != checks.SHARED_SYSTEM
+    system, user = checks.conversation("Hi", "run1", "3", shared_system=True)
+    assert system == checks.SHARED_SYSTEM and user.endswith("] Hi") and user.startswith("[")
+    assert checks.conversation("Hi", None, "3") == (None, "Hi")

@@ -36,17 +36,19 @@ def split(pairs):
 
 
 def cmd_selfcheck(args):
-    print("| setup | weights | cache reuse | co-batched | cached on first / repeat request |")
-    print("| --- | --- | --- | --- | --- |")
+    print("| setup | weights | conversations | cache reuse | first request under load | "
+          "repeat under load | cached on first / repeat request |")
+    print("| --- | --- | --- | --- | --- | --- | --- |")
     for label, d in split(args.dirs):
-        for path in sorted(glob.glob(os.path.join(d, "*.selfcheck.json"))):
-            w = os.path.basename(path).split(".")[0]
+        for path in sorted(glob.glob(os.path.join(d, "*.selfcheck.*.json"))):
+            w, _, kind, _ = os.path.basename(path).split(".")
             c = json.load(open(path))["checks"]
             reuse = c["cache reuse"]
-            busy = next((v for k, v in c.items() if k.startswith("co-batched")), None)
             first, rep = reuse.get("scratch_hit_ratio"), reuse.get("cache_hit_ratio")
             cached = "n/a" if rep is None else f"{100 * (first or 0):.0f}% / {100 * rep:.0f}%"
-            print(f"| {label} | {w} | {cell(reuse)} | {cell(busy) if busy else 'n/a'} | {cached} |")
+            cells = [cell(c[k]) if k in c else "n/a"
+                     for k in ("cache reuse", "first request under load", "repeat under load")]
+            print(f"| {label} | {w} | {kind} | {' | '.join(cells)} | {cached} |")
 
 
 def row(label, name, c):

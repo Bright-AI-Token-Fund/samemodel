@@ -5,7 +5,7 @@ import gzip
 import hashlib
 import json
 import secrets
-from typing import Callable, Dict, List, Optional, Sequence
+from typing import Callable, Dict, List, Optional, Sequence, Tuple
 
 from .client import Client, Record
 from .compare import Comparison, compare
@@ -13,70 +13,124 @@ from .compare import Comparison, compare
 Progress = Optional[Callable[[int, int], None]]
 
 
-def marker(nonce: Optional[str], label: str) -> Optional[str]:
-    """A system message that makes a conversation unique from its very first tokens.
+SHARED_SYSTEM = "You are a helpful assistant."
+
+
+def _unique(nonce: str, label: str) -> str:
+    # hash so that two markers of the same run already differ in their first characters
+    return hashlib.blake2b(f"{nonce}:{label}".encode(), digest_size=5).hexdigest()
+
+
+def conversation(prompt: str, nonce: Optional[str], label: str,
+                 shared_system: bool = False) -> Tuple[Optional[str], str]:
+    """Return (system message, user message) for one measured prompt.
 
     A server with a prefix cache reuses whatever prefix a request shares with earlier
-    ones, and that alone can change the computation. Putting a per-run marker at the
-    start of the system message leaves only the first few template tokens shared, so
-    the first request for each prompt is computed (almost) from scratch.
+    ones, and that alone can change the computation. By default the per-run marker
+    opens the system message, so only the first few template tokens are shared and the
+    first request for each prompt is computed (almost) from scratch.
+
+    With ``shared_system`` every conversation has the same system message and the
+    marker opens the user message instead. That is how most deployments look: the
+    first request for a prompt then already reuses the cached system prefix.
     """
     if not nonce:
-        return None
-    # hash so that two markers of the same run already differ in their first characters
-    unique = hashlib.blake2b(f"{nonce}:{label}".encode(), digest_size=5).hexdigest()
-    return f"{unique} is the id of this session. You are a helpful assistant."
+        return None, prompt
+    unique = _unique(nonce, label)
+    if shared_system:
+        return SHARED_SYSTEM, f"[{unique}] {prompt}"
+    return f"{unique} is the id of this session. {SHARED_SYSTEM}", prompt
+
+
+def marker(nonce: Optional[str], label: str) -> Optional[str]:
+    """The system message used for a unique conversation (see ``conversation``)."""
+    return conversation("", nonce, label)[0]
+
+
+def companions_for(prompts: Sequence[str], nonce: Optional[str], i: int, count: int,
+                   shared_system: bool = False) -> List[Tuple[Optional[str], str]]:
+    """Unrelated conversations to send alongside prompt ``i``.
+
+    They carry their own markers so they never warm the cache for a prompt that is
+    measured later.
+    """
+    return [conversation(prompts[(i + 7 * k) % len(prompts)], nonce or "c", f"c{i}-{k}", shared_system)
+            for k in range(1, count + 1)]
 
 
 def record_run(client: Client, prompts: Sequence[str], nonce: Optional[str] = None,
+               companions: int = 0, shared_system: bool = False,
                progress: Progress = None) -> List[Record]:
     out = []
     for i, p in enumerate(prompts):
-        out.append(client.record(f"p{i:03d}", p, system=marker(nonce, str(i))))
+        system, user = conversation(p, nonce, str(i), shared_system)
+        out.append(client.record(f"p{i:03d}", user, system=system,
+                                 companions=companions_for(prompts, nonce, i, companions, shared_system)))
         if progress:
             progress(i + 1, len(prompts))
     return out
 
 
+REUSE = "cache reuse"
+FIRST_LOADED = "first request under load"
+REPEAT_LOADED = "repeat under load"
+
+
 def selfcheck(client: Client, prompts: Sequence[str], companions: int = 3,
-              nonce: Optional[str] = "auto", progress: Progress = None) -> Dict[str, Comparison]:
+              nonce: Optional[str] = "auto", shared_system: bool = False,
+              progress: Progress = None) -> Dict[str, Comparison]:
     """Does one endpoint answer the same way under different serving conditions?
 
     Each prompt is sent three times:
-      scratch  first time the server sees this conversation
-      cached   the identical request again (reusing the prompt cache, if any)
-      busy     again, at the same moment as ``companions`` unrelated requests
+      first   the first time the server sees this conversation
+      repeat  the identical request again, alone (reusing the prompt cache, if any)
+      loaded  again, at the same moment as ``companions`` unrelated requests
 
-    ``cache reuse`` compares cached against scratch; ``co-batched`` compares busy
-    against cached, so that both sides of that comparison start from the same cache
-    state.
+    A caching server can compute a conversation for the first time only once, so the
+    prompts are split: every second prompt makes its *first* request under load.
+
+      cache reuse               first (alone)  vs repeat, on the prompts that started alone
+      first request under load  first (loaded) vs repeat, on the other prompts; this also
+                                contains the cache reuse effect, so read it against the row above
+      repeat under load         repeat vs loaded, on all prompts
     """
     if nonce == "auto":
         nonce = secrets.token_hex(4)
-    scratch: List[Record] = []
-    cached: List[Record] = []
-    busy: List[Record] = []
+    first: List[Record] = []
+    repeat: List[Record] = []
+    loaded: List[Record] = []
+    started_loaded = set()
     for i, p in enumerate(prompts):
-        pid, system = f"p{i:03d}", marker(nonce, str(i))
-        scratch.append(client.record(pid, p, system=system))
-        cached.append(client.record(pid, p, system=system))
+        pid = f"p{i:03d}"
+        system, user = conversation(p, nonce, str(i), shared_system)
+        if companions > 0 and i % 2 == 1:
+            started_loaded.add(pid)
+            others = companions_for(prompts, nonce, i, companions, shared_system)
+            first.append(client.record(pid, user, system=system, companions=others))
+        else:
+            first.append(client.record(pid, user, system=system))
+        repeat.append(client.record(pid, user, system=system))
         if companions > 0:
-            # companions carry their own marker so they never warm the cache for a
-            # prompt that is measured from scratch later
-            others = [(marker(nonce or "c", f"c{i}-{k}"), prompts[(i + 7 * k) % len(prompts)])
-                      for k in range(1, companions + 1)]
-            busy.append(client.record(pid, p, system=system, companions=others))
+            # new companions, so that the load again includes prompt processing
+            others = companions_for(prompts, f"{nonce}-again", i, companions, shared_system)
+            loaded.append(client.record(pid, user, system=system, companions=others))
         if progress:
             progress(i + 1, len(prompts))
-    rows = {"cache reuse": compare(scratch, cached)}
+
+    alone = [r for r in first if r["id"] not in started_loaded]
+    rows = {REUSE: compare(alone, repeat)}
+    if started_loaded:
+        rows[FIRST_LOADED] = compare([r for r in first if r["id"] in started_loaded], repeat)
     if companions > 0:
-        rows[f"co-batched x{companions + 1}"] = compare(cached, busy)
-    hits = [r["cached_tokens"] for r in cached if r.get("cached_tokens") is not None]
-    total = [r["prompt_tokens"] for r in cached if r.get("prompt_tokens")]
-    rows["cache reuse"].cache_hit_ratio = (sum(hits) / sum(total)) if hits and total else None
-    first = [r["cached_tokens"] for r in scratch if r.get("cached_tokens") is not None]
-    first_total = [r["prompt_tokens"] for r in scratch if r.get("prompt_tokens")]
-    rows["cache reuse"].scratch_hit_ratio = (sum(first) / sum(first_total)) if first and first_total else None
+        rows[REPEAT_LOADED] = compare(repeat, loaded)
+
+    def ratio(records: Sequence[Record]) -> Optional[float]:
+        hits = [r["cached_tokens"] for r in records if r.get("cached_tokens") is not None]
+        total = [r["prompt_tokens"] for r in records if r.get("prompt_tokens")]
+        return (sum(hits) / sum(total)) if hits and total else None
+
+    rows[REUSE].cache_hit_ratio = ratio(repeat)
+    rows[REUSE].scratch_hit_ratio = ratio(first)
     return rows
 
 

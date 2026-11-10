@@ -25,8 +25,8 @@ def _endpoint_args(p: argparse.ArgumentParser, prefix: str = "") -> None:
 
 
 def _run_args(p: argparse.ArgumentParser) -> None:
-    p.add_argument("-n", "--prompts", type=int, default=20, metavar="N",
-                   help="how many built-in prompts to use (default: 20, max: %d)" % len(PROMPTS))
+    p.add_argument("-n", "--prompts", type=int, default=24, metavar="N",
+                   help="how many built-in prompts to use (default: 24, max: %d)" % len(PROMPTS))
     p.add_argument("--prompt-file", metavar="FILE",
                    help="use your own prompts instead: a JSON list of strings, or one prompt per line")
     p.add_argument("--max-tokens", type=int, default=128, help="tokens to generate per prompt (default: 128)")
@@ -92,25 +92,31 @@ def cmd_selfcheck(args) -> int:
     prompts = _load_prompts(args)
     rows = checks.selfcheck(client, prompts, companions=args.companions,
                             nonce=None if args.no_nonce else "auto",
-                            progress=_progress("selfcheck"))
+                            shared_system=args.shared_system, progress=_progress("selfcheck"))
+    kind = "shared system prompt" if args.shared_system else "unique conversations"
     header = (f"samemodel selfcheck  {args.base_url}  model={client.model}  "
-              f"{len(prompts)} prompts x {args.max_tokens} tokens")
+              f"{len(prompts)} prompts x {args.max_tokens} tokens  ({kind})")
     code = _finish(rows, args, header, {"endpoint": args.base_url, "model": client.model,
-                                        "prompts": len(prompts), "max_tokens": args.max_tokens})
-    reuse = rows["cache reuse"]
+                                        "prompts": len(prompts), "max_tokens": args.max_tokens,
+                                        "shared_system": args.shared_system})
+    reuse = rows[checks.REUSE]
     if reuse.cache_hit_ratio is not None:
         first = reuse.scratch_hit_ratio or 0.0
-        print(f"\nPrompt tokens served from cache, as reported by the endpoint: "
-              f"{100 * first:.0f}% on the first request, {100 * reuse.cache_hit_ratio:.0f}% on the repeat.")
+        print(f"\nPrompt tokens served from cache, as the endpoint reports it: "
+              f"{100 * first:.0f}% first request, {100 * reuse.cache_hit_ratio:.0f}% repeat.")
         if reuse.cache_hit_ratio < 0.5:
             print("The repeat was mostly recomputed, so 'cache reuse' says little about caching here.")
+    if not args.shared_system:
+        print("Every conversation here starts differently. Run again with --shared-system to test "
+              "requests\nthat share a system prompt, as most deployments do.")
     return code
 
 
 def cmd_record(args) -> int:
     client = _client(args)
     prompts = _load_prompts(args)
-    records = checks.record_run(client, prompts, nonce=args.tag, progress=_progress("record"))
+    records = checks.record_run(client, prompts, nonce=args.tag, companions=args.companions,
+                                shared_system=args.shared_system, progress=_progress("record"))
     checks.save(records, args.out)
     print(f"recorded {len(records)} prompts from {args.base_url} (model={client.model}) to {args.out}")
     return 0
@@ -152,12 +158,15 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--version", action="version", version=f"samemodel {__version__}")
     sub = ap.add_subparsers(dest="command", required=True)
 
-    p = sub.add_parser("selfcheck", help="one endpoint: do prompt-cache reuse and co-batching "
+    p = sub.add_parser("selfcheck", help="one endpoint: do prompt-cache reuse and concurrent load "
                                          "change its answers?")
     _endpoint_args(p)
     _run_args(p)
     p.add_argument("--companions", type=int, default=3,
                    help="unrelated requests sent alongside each measured one (default: 3; 0 skips the check)")
+    p.add_argument("--shared-system", action="store_true",
+                   help="give every conversation the same system message, as most deployments do; "
+                        "the first request for a prompt then already reuses the cached system prefix")
     p.add_argument("--no-nonce", action="store_true",
                    help="do not add a per-run system message "
                         "(the first request may then reuse a cached prefix)")
@@ -172,6 +181,11 @@ def build_parser() -> argparse.ArgumentParser:
                    help="start every conversation with a system message containing TEXT, so that "
                         "nothing is reused from the server's prompt cache; use the same tag for "
                         "the runs you want to compare, and a new one per server lifetime")
+    p.add_argument("--companions", type=int, default=0,
+                   help="send this many unrelated requests alongside each recorded one (default: 0)")
+    p.add_argument("--shared-system", action="store_true",
+                   help="with --tag: give every conversation the same system message and put the "
+                        "marker at the start of the user message instead")
     p.set_defaults(func=cmd_record)
 
     p = sub.add_parser("diff", help="compare two recorded runs")

@@ -23,28 +23,40 @@ SAMEMODEL="${SAMEMODEL:-samemodel}"
 URL="http://127.0.0.1:$PORT"
 mkdir -p "$OUT"
 
-for model in $MODELS; do
-  q="${model##*-}"            # 4bit / 8bit / bf16
-  if [ -s "$OUT/$q.selfcheck.json" ] && [ -s "$OUT/$q.scratch.jsonl.gz" ]; then
-    echo "skip $q (complete)"; continue
-  fi
-  "$PY" -m mlx_lm server --model "$model" --host 127.0.0.1 --port "$PORT" \
-    --log-level WARNING > "$OUT/$q.server.log" 2>&1 &
+start() {  # <model repo> <short name>
+  "$PY" -m mlx_lm server --model "$1" --host 127.0.0.1 --port "$PORT" \
+    --log-level WARNING > "$OUT/$2.server.log" 2>&1 &
   pid=$!
   trap 'kill $pid 2>/dev/null || true' EXIT
   for _ in $(seq 1 600); do
-    if curl -s -m 2 "$URL/health" 2>/dev/null | grep -q ok; then break; fi
-    if ! kill -0 "$pid" 2>/dev/null; then echo "server for $q exited early" >&2; exit 1; fi
+    if curl -s -m 2 "$URL/health" 2>/dev/null | grep -q ok; then return 0; fi
+    if ! kill -0 "$pid" 2>/dev/null; then echo "server for $2 exited early" >&2; exit 1; fi
     sleep 1
   done
-  # shellcheck disable=SC2086
-  $SAMEMODEL selfcheck --base-url "$URL" --model "$model" -n "$PROMPTS" --forks 3 \
-    --json "$OUT/$q.selfcheck.json" > "$OUT/$q.selfcheck.txt"
+}
+
+stop() {
+  kill "$pid"; wait "$pid" 2>/dev/null || true
+  trap - EXIT
+}
+
+for model in $MODELS; do
+  q="${model##*-}"            # 4bit / 8bit / bf16
+  for kind in unique shared; do
+    [ -s "$OUT/$q.selfcheck.$kind.json" ] && { echo "skip $q selfcheck ($kind)"; continue; }
+    flag=""; [ "$kind" = shared ] && flag="--shared-system"
+    start "$model" "$q"
+    # shellcheck disable=SC2086
+    $SAMEMODEL selfcheck --base-url "$URL" --model "$model" -n "$PROMPTS" --forks 3 $flag \
+      --json "$OUT/$q.selfcheck.$kind.json" > "$OUT/$q.selfcheck.$kind.txt"
+    stop
+    echo "== $q ($kind)"; sed -n 3,6p "$OUT/$q.selfcheck.$kind.txt"
+  done
+  [ -s "$OUT/$q.scratch.jsonl.gz" ] && { echo "skip $q reference recording"; continue; }
+  start "$model" "$q"
   # shellcheck disable=SC2086
   $SAMEMODEL record --base-url "$URL" --model "$model" -n "$PROMPTS" --tag reference \
     -o "$OUT/$q.scratch.jsonl.gz" > /dev/null
-  kill "$pid"; wait "$pid" 2>/dev/null || true
-  trap - EXIT
-  echo "== $q"; sed -n 3,5p "$OUT/$q.selfcheck.txt"
+  stop
 done
 echo "all done"

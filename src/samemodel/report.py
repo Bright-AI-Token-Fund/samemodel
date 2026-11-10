@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import math
+import textwrap
 from typing import Any, Dict, List, Optional
 
 from .compare import Comparison, percentile
@@ -19,6 +20,8 @@ DRIFT_MAX_P50, DRIFT_MAX_P99 = 0.15, 1.0
 # Fallback when log-probabilities sit on a coarse grid and small drifts read as zero.
 COARSE_GRID = 1.0 / 256
 NOISE_MIN_AGREEMENT, DRIFT_MIN_AGREEMENT = 0.999, 0.97
+
+WIDTH = 92  # the report wraps here so that it reads well in a terminal and in a code block
 
 SEVERITY = {"identical": 0, "noise": 1, "drift": 2, "different": 3, "differs-unsized": 3, "empty": 0}
 
@@ -112,7 +115,12 @@ def explain(name: str, c: Comparison) -> List[str]:
     if c.resolution and v != "identical":
         lines.append(f"  Note: this endpoint reports log-probabilities on a {c.resolution:g}-nat "
                      "grid, so drift below that reads as 0. Rely on the argmax agreement.")
-    return lines
+    wrapped: List[str] = []
+    for line in lines:
+        indent = "  " if line.startswith("  ") else ""
+        wrapped += textwrap.wrap(line.strip(), width=WIDTH, initial_indent=indent,
+                                 subsequent_indent="  ")
+    return wrapped
 
 
 def table(rows: Dict[str, Comparison]) -> List[str]:
