@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Measure whether an LLM inference endpoint still serves the same model after a cache hit, co-batching, a backend or a quantization change."
 readme = "README.md"
 license = "Apache-2.0"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
 keywords = ["llm", "inference", "determinism", "batch-invariance", "quantization", "llama.cpp", "vllm"]
 classifiers = [
@@ -25,6 +25,9 @@ Repository = "https://github.com/Bright-AI-Token-Fund/samemodel"
 [project.scripts]
 samemodel = "samemodel.cli:main"
 
+[dependency-groups]
+dev = ["pytest>=8", "ruff"]
+
 [tool.hatch.version]
 path = "src/samemodel/__init__.py"
 
@@ -33,7 +36,7 @@ packages = ["src/samemodel"]
 
 [tool.ruff]
 line-length = 110
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B"]

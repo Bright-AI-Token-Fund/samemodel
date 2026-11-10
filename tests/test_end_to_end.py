@@ -11,7 +11,7 @@ from samemodel.mock import MockServer
 from samemodel.prompts import PROMPTS
 from samemodel.report import verdict
 
-FAST = dict(window_ms=15)
+FAST = {"window_ms": 40}
 
 
 def run_selfcheck(n=12, max_tokens=48, **server):

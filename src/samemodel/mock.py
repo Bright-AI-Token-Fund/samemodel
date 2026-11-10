@@ -53,7 +53,7 @@ class ToyModel:
                 noise = _rng(context, label)
                 logits = [x + noise.gauss(0.0, amount) for x in logits]
         norm = math.log(sum(math.exp(x) for x in logits))
-        scored = [(i, x - norm) for i, x in zip(ids, logits)]
+        scored = [(i, x - norm) for i, x in zip(ids, logits, strict=True)]
         if self.resolution:
             scored = [(i, round(lp / self.resolution) * self.resolution) for i, lp in scored]
         scored.sort(key=lambda p: (-p[1], p[0]))
@@ -81,6 +81,7 @@ class MockServer:
         self.window = window_ms / 1000.0
         self._seen = set()
         self._in_flight = 0
+        self._arrivals = 0
         self._lock = threading.Lock()
         outer = self
 
@@ -127,12 +128,16 @@ class MockServer:
     def complete(self, prompt: str, req: dict) -> dict:
         with self._lock:
             self._in_flight += 1
+            self._arrivals += 1
+            arrivals = self._arrivals
+            batched = self._in_flight > 1
             cached = prompt in self._seen
             self._seen.add(prompt)
         try:
-            time.sleep(self.window)  # let simultaneous requests pile up, like a batching window
+            # a batching window: anything that arrives while we wait shares the batch
+            time.sleep(self.window)
             with self._lock:
-                batched = self._in_flight > 1
+                batched = batched or self._arrivals > arrivals
             max_tokens = int(req.get("max_tokens") or 16)
             steps = self.model.generate(prompt, max_tokens, cached, batched)
         finally:
