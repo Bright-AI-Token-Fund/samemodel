@@ -17,9 +17,11 @@ from .compare import Comparison, percentile
 NOISE_MAX_P50, NOISE_MAX_P99 = 0.01, 0.1
 # a small quantisation step, fp16 -> Q8_0, measures ~0.065 / ~0.4
 DRIFT_MAX_P50, DRIFT_MAX_P99 = 0.15, 1.0
-# Fallback when log-probabilities sit on a coarse grid and small drifts read as zero.
-COARSE_GRID = 1.0 / 256
-NOISE_MIN_AGREEMENT, DRIFT_MIN_AGREEMENT = 0.999, 0.97
+# Fallback when log-probabilities sit on a grid too coarse to resolve the noise
+# threshold (half-precision engines report 1/128 to 1/16 nat), or are missing: the
+# argmax agreement. On the same measurements, rounding noise agrees on 99.85% of the
+# positions or more, a drift of 0.015 nat on 99.65% or fewer.
+NOISE_MIN_AGREEMENT, DRIFT_MIN_AGREEMENT = 0.998, 0.97
 
 WIDTH = 92  # the report wraps here so that it reads well in a terminal and in a code block
 
@@ -34,17 +36,18 @@ REFERENCES = [
 ]
 
 
-def verdict(c: Comparison) -> str:
-    if c.prompts == 0:
+def classify(prompts: int, identical_outputs: int, with_logprobs: bool, bitwise_like: bool,
+             agreement: Optional[float], d50: Optional[float], d99: Optional[float],
+             resolution: Optional[float]) -> str:
+    if prompts == 0:
         return "empty"
-    if not c.with_logprobs:
-        return "identical" if c.identical_outputs == c.prompts else "differs-unsized"
-    if c.bitwise_like:
+    if not with_logprobs:
+        return "identical" if identical_outputs == prompts else "differs-unsized"
+    if bitwise_like:
         return "identical"
-    d50, d99 = percentile(c.drift, 0.5), percentile(c.drift, 0.99)
-    coarse = c.resolution is not None and c.resolution >= COARSE_GRID
-    if d50 is None or coarse:
-        agreement = c.agreement if c.agreement is not None else 0.0
+    coarse = resolution is not None and resolution > NOISE_MAX_P50
+    if d50 is None or d99 is None or coarse:
+        agreement = agreement if agreement is not None else 0.0
         if agreement >= NOISE_MIN_AGREEMENT:
             return "noise"
         return "drift" if agreement >= DRIFT_MIN_AGREEMENT else "different"
@@ -55,6 +58,20 @@ def verdict(c: Comparison) -> str:
     if d50 < DRIFT_MAX_P50 and d99 < DRIFT_MAX_P99:
         return "drift"
     return "different"
+
+
+def verdict(c: Comparison) -> str:
+    return classify(c.prompts, c.identical_outputs, c.with_logprobs, c.bitwise_like, c.agreement,
+                    percentile(c.drift, 0.5), percentile(c.drift, 0.99), c.resolution)
+
+
+def verdict_of(summary: Dict[str, Any]) -> str:
+    """The verdict for a check as stored by ``to_json``, under the current thresholds."""
+    s = summary
+    exact = s["identical_outputs"] == s["prompts"] > 0 and (s.get("max_logprob_diff") or 0) <= 1e-9
+    return classify(s["prompts"], s["identical_outputs"], s.get("with_logprobs", True), exact,
+                    s.get("argmax_agreement"), s.get("drift_p50"), s.get("drift_p99"),
+                    s.get("logprob_resolution"))
 
 
 def scale(drift_p50: Optional[float]) -> Optional[str]:
@@ -114,7 +131,7 @@ def explain(name: str, c: Comparison) -> List[str]:
             lines.append("  If these were meant to be the same model and configuration, look closer.")
     if c.resolution and v != "identical":
         lines.append(f"  Note: this endpoint reports log-probabilities on a {c.resolution:g}-nat "
-                     "grid, so drift below that reads as 0. Rely on the argmax agreement.")
+                     "grid, so drift below that reads as 0. Read the argmax agreement as well.")
     wrapped: List[str] = []
     for line in lines:
         indent = "  " if line.startswith("  ") else ""

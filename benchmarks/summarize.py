@@ -4,6 +4,7 @@ benchmarks/README.md, so that no number in that file is typed by hand.
 
 Usage:
   summarize.py selfcheck LABEL=DIR [LABEL=DIR ...] [--weights fp16 q8_0 q4_k_m]
+  summarize.py overview  LABEL=DIR [LABEL=DIR ...] --weights fp16 q8_0 q4_k_m
   summarize.py weights   LABEL=DIR [LABEL=DIR ...] --steps fp16:q8_0 q8_0:q4_k_m
   summarize.py across    LABEL_A=DIR_A LABEL_B=DIR_B --weights q4_k_m q8_0 fp16
 """
@@ -16,7 +17,7 @@ import os
 
 from samemodel import checks
 from samemodel.compare import compare
-from samemodel.report import verdict
+from samemodel.report import verdict, verdict_of
 
 
 def pct(x):
@@ -29,8 +30,9 @@ def num(x):
 
 def cell(s):
     """verdict / identical outputs and argmax agreement / median and 99th percentile drift"""
-    lines = [f"**{s['verdict']}**", f"{s['identical_outputs']}/{s['prompts']} same"]
-    if s["verdict"] != "identical":
+    v = verdict_of(s)  # recomputed, so that a table never mixes threshold versions
+    lines = [f"**{v}**", f"{s['identical_outputs']}/{s['prompts']} same"]
+    if v != "identical":
         lines[1] += f", argmax {pct(s['argmax_agreement'])}"
         lines.append(f"drift {num(s['drift_p50'])} / {num(s['drift_p99'])}")
     return "<br>".join(lines)
@@ -62,6 +64,26 @@ def cmd_selfcheck(args):
                      for k in ("cache reuse", "first request under load", "repeat under load")]
             row = ([label] if lead else []) + [w, kind, *cells, cached]
             print("| " + " | ".join(row) + " |")
+
+
+def brief(s):
+    v = verdict_of(s)
+    if v == "identical":
+        return "identical"
+    changed = s["prompts"] - s["identical_outputs"]
+    return f"{v}: {changed} of {s['prompts']} answers changed, drift {num(s['drift_p50'])}"
+
+
+def cmd_overview(args):
+    """The short table of the top-level README: unique conversations only."""
+    print("| setup | weights | reusing the prompt cache | sharing the server with other requests |")
+    print("| --- | --- | --- | --- |")
+    for label, d in split(args.dirs):
+        for w in args.weights:
+            path = os.path.join(d, f"{w}.selfcheck.unique.json")
+            if os.path.exists(path):
+                c = json.load(open(path))["checks"]
+                print(f"| {label} | {w} | {brief(c['cache reuse'])} | {brief(c['repeat under load'])} |")
 
 
 def row(label, name, c):
@@ -101,6 +123,11 @@ def main():
     p.add_argument("dirs", nargs="+")
     p.add_argument("--weights", nargs="+", help="row order (default: alphabetical)")
     p.set_defaults(f=cmd_selfcheck)
+
+    p = sub.add_parser("overview")
+    p.add_argument("dirs", nargs="+")
+    p.add_argument("--weights", nargs="+", required=True)
+    p.set_defaults(f=cmd_overview)
 
     p = sub.add_parser("weights")
     p.add_argument("dirs", nargs="+")

@@ -99,3 +99,18 @@ def test_heavy_tail_is_not_reported_as_noise():
     c = compare(a, b)
     assert percentile(c.drift, 0.5) == 0.0
     assert verdict(c) == "different"
+
+
+def test_verdict_on_a_log_probability_grid():
+    from samemodel.report import classify
+
+    def v(agreement, d50, d99, resolution):
+        return classify(30, 25, True, False, agreement, d50, d99, resolution)
+
+    # 1/128 nat still resolves the noise threshold, so the drift decides
+    assert v(0.9985, 1 / 128, 4 / 128, 1 / 128) == "noise"
+    assert v(0.9985, 2 / 128, 4 / 128, 1 / 128) == "drift"
+    # 1/16 nat does not: the median reads 0 either way and the agreement decides
+    assert v(0.9985, 0.0, 1 / 16, 1 / 16) == "noise"
+    assert v(0.9960, 0.0, 1 / 16, 1 / 16) == "drift"
+    assert v(0.9000, 0.0, 1 / 16, 1 / 16) == "different"
