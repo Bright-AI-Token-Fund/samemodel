@@ -54,7 +54,7 @@ def default_model(base_url: str, api_key: Optional[str] = None, timeout: float =
 
 class Client:
     def __init__(self, base_url: str, model: Optional[str] = None, api_key: Optional[str] = None,
-                 max_tokens: int = 128, top_logprobs: int = 10, seed: int = 1,
+                 max_tokens: int = 128, top_logprobs: int = 10, seed: Optional[int] = None,
                  extra_body: Optional[dict] = None, timeout: float = 600):
         self.base_url = base_url
         self.api_key = api_key
@@ -73,9 +73,13 @@ class Client:
             "model": self.model,
             "messages": messages,
             "temperature": 0,
-            "seed": self.seed,
             "max_tokens": self.max_tokens,
         }
+        # No seed unless asked for. Greedy decoding does not need one, and a request
+        # that carries one can be served on another path: mlx_lm.server takes it out
+        # of batching, which hides the very effect being measured.
+        if self.seed is not None:
+            payload["seed"] = self.seed
         if logprobs and self.top_logprobs > 0:
             payload["logprobs"] = True
             payload["top_logprobs"] = self.top_logprobs
@@ -100,6 +104,12 @@ class Client:
         for th in threads:
             th.join()
         return parse_response(prompt_id, prompt, data)
+
+    def warm(self, prompt: str, system: Optional[str] = None) -> None:
+        """Send one throwaway request, so that the server has seen ``system`` before."""
+        payload = self._payload(prompt, False, system)
+        payload["max_tokens"] = 1
+        _request(_url(self.base_url, "/chat/completions"), payload, self.api_key, self.timeout)
 
     def _discard(self, prompt: str, system: Optional[str]) -> None:
         try:

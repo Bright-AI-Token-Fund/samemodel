@@ -14,6 +14,7 @@
 #   SERVER_FLAGS  backend selection for llama-server  (default: "--device none -ngl 0", CPU only)
 #   MODEL_PREFIX  GGUF file name prefix               (default: qwen2.5-0.5b-instruct)
 #   SAMEMODEL     how to invoke the tool              (default: samemodel)
+#   EXTRA_ARGS    more arguments for selfcheck and record, e.g. "--seed 1"
 #   PROMPTS, THREADS, PORT
 #
 # Only the server PID started here is ever stopped.
@@ -27,6 +28,7 @@ QUANTS="${QUANTS:-q4_k_m q8_0 fp16}"
 SERVER_FLAGS="${SERVER_FLAGS:---device none -ngl 0}"
 MODEL_PREFIX="${MODEL_PREFIX:-qwen2.5-0.5b-instruct}"
 SAMEMODEL="${SAMEMODEL:-samemodel}"
+EXTRA_ARGS="${EXTRA_ARGS:-}"
 URL="http://127.0.0.1:$PORT"
 mkdir -p "$OUT"
 
@@ -54,7 +56,7 @@ for q in $QUANTS; do
     flag=""; [ "$kind" = shared ] && flag="--shared-system"
     start "$q"
     # shellcheck disable=SC2086
-    $SAMEMODEL selfcheck --base-url "$URL" --model "$MODEL_PREFIX-$q" -n "$PROMPTS" --forks 3 $flag \
+    $SAMEMODEL selfcheck --base-url "$URL" --model "$MODEL_PREFIX-$q" -n "$PROMPTS" --forks 3 $flag $EXTRA_ARGS \
       --json "$OUT/$q.selfcheck.$kind.json" > "$OUT/$q.selfcheck.$kind.txt"
     stop
     echo "== $q ($kind)"; sed -n 3,6p "$OUT/$q.selfcheck.$kind.txt"
@@ -62,7 +64,7 @@ for q in $QUANTS; do
   [ -s "$OUT/$q.scratch.jsonl.gz" ] && { echo "skip $q reference recording"; continue; }
   start "$q"
   # shellcheck disable=SC2086
-  $SAMEMODEL record --base-url "$URL" --model "$MODEL_PREFIX-$q" -n "$PROMPTS" \
+  $SAMEMODEL record --base-url "$URL" --model "$MODEL_PREFIX-$q" -n "$PROMPTS" $EXTRA_ARGS \
     --extra-body '{"cache_prompt": false}' -o "$OUT/$q.scratch.jsonl.gz" > /dev/null
   stop
 done

@@ -6,6 +6,7 @@
 # Environment:
 #   MODELS     Hugging Face repos   (default: the three Qwen2.5-0.5B-Instruct MLX builds)
 #   SAMEMODEL  how to invoke the tool (default: samemodel)
+#   EXTRA_ARGS more arguments for selfcheck and record, e.g. "--seed 1"
 #   PROMPTS, PORT
 #
 # mlx_lm.server always keeps a prompt cache and has no per-request switch for it, so
@@ -20,6 +21,7 @@ PORT="${PORT:-18432}"
 PROMPTS="${PROMPTS:-60}"
 MODELS="${MODELS:-mlx-community/Qwen2.5-0.5B-Instruct-4bit mlx-community/Qwen2.5-0.5B-Instruct-8bit mlx-community/Qwen2.5-0.5B-Instruct-bf16}"
 SAMEMODEL="${SAMEMODEL:-samemodel}"
+EXTRA_ARGS="${EXTRA_ARGS:-}"
 URL="http://127.0.0.1:$PORT"
 mkdir -p "$OUT"
 
@@ -47,7 +49,7 @@ for model in $MODELS; do
     flag=""; [ "$kind" = shared ] && flag="--shared-system"
     start "$model" "$q"
     # shellcheck disable=SC2086
-    $SAMEMODEL selfcheck --base-url "$URL" --model "$model" -n "$PROMPTS" --forks 3 $flag \
+    $SAMEMODEL selfcheck --base-url "$URL" --model "$model" -n "$PROMPTS" --forks 3 $flag $EXTRA_ARGS \
       --json "$OUT/$q.selfcheck.$kind.json" > "$OUT/$q.selfcheck.$kind.txt"
     stop
     echo "== $q ($kind)"; sed -n 3,6p "$OUT/$q.selfcheck.$kind.txt"
@@ -55,7 +57,7 @@ for model in $MODELS; do
   [ -s "$OUT/$q.scratch.jsonl.gz" ] && { echo "skip $q reference recording"; continue; }
   start "$model" "$q"
   # shellcheck disable=SC2086
-  $SAMEMODEL record --base-url "$URL" --model "$model" -n "$PROMPTS" --tag reference \
+  $SAMEMODEL record --base-url "$URL" --model "$model" -n "$PROMPTS" --tag reference $EXTRA_ARGS \
     -o "$OUT/$q.scratch.jsonl.gz" > /dev/null
   stop
 done

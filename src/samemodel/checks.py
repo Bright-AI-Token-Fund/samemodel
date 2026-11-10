@@ -58,9 +58,21 @@ def companions_for(prompts: Sequence[str], nonce: Optional[str], i: int, count: 
             for k in range(1, count + 1)]
 
 
+def warm_up(client: Client, nonce: Optional[str], shared_system: bool) -> None:
+    """With a shared system message, let the server see it once before measuring.
+
+    On a freshly started server the very first conversation would otherwise be the
+    only one that finds nothing to reuse, an outlier among requests that all do.
+    """
+    if shared_system and nonce:
+        system, user = conversation("Say hello.", nonce, "warm-up", shared_system=True)
+        client.warm(user, system)
+
+
 def record_run(client: Client, prompts: Sequence[str], nonce: Optional[str] = None,
                companions: int = 0, shared_system: bool = False,
                progress: Progress = None) -> List[Record]:
+    warm_up(client, nonce, shared_system)
     out = []
     for i, p in enumerate(prompts):
         system, user = conversation(p, nonce, str(i), shared_system)
@@ -96,6 +108,7 @@ def selfcheck(client: Client, prompts: Sequence[str], companions: int = 3,
     """
     if nonce == "auto":
         nonce = secrets.token_hex(4)
+    warm_up(client, nonce, shared_system)
     first: List[Record] = []
     repeat: List[Record] = []
     loaded: List[Record] = []

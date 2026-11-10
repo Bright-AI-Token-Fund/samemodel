@@ -32,6 +32,9 @@ def _run_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("--max-tokens", type=int, default=128, help="tokens to generate per prompt (default: 128)")
     p.add_argument("--top-logprobs", type=int, default=10,
                    help="alternatives to request per token (default: 10; 0 compares text only)")
+    p.add_argument("--seed", type=int, metavar="N",
+                   help="send this seed with every request (default: none; greedy decoding needs "
+                        "none, and some servers stop batching requests that carry one)")
     p.add_argument("--extra-body", metavar="JSON",
                    help='extra fields merged into every request, e.g. \'{"cache_prompt": false}\'')
     p.add_argument("--timeout", type=float, default=600, help="seconds per request (default: 600)")
@@ -62,7 +65,7 @@ def _client(args, prefix: str = "") -> Client:
     get = lambda name: getattr(args, (prefix + name).replace("-", "_"))  # noqa: E731
     extra = json.loads(args.extra_body) if args.extra_body else None
     return Client(get("base_url"), model=get("model"), api_key=get("api_key"),
-                  max_tokens=args.max_tokens, top_logprobs=args.top_logprobs,
+                  max_tokens=args.max_tokens, top_logprobs=args.top_logprobs, seed=args.seed,
                   extra_body=extra, timeout=args.timeout)
 
 
@@ -98,7 +101,7 @@ def cmd_selfcheck(args) -> int:
               f"{len(prompts)} prompts x {args.max_tokens} tokens  ({kind})")
     code = _finish(rows, args, header, {"endpoint": args.base_url, "model": client.model,
                                         "prompts": len(prompts), "max_tokens": args.max_tokens,
-                                        "shared_system": args.shared_system})
+                                        "shared_system": args.shared_system, "seed": args.seed})
     reuse = rows[checks.REUSE]
     if reuse.cache_hit_ratio is not None:
         first = reuse.scratch_hit_ratio or 0.0

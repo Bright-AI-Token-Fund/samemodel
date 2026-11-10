@@ -132,3 +132,29 @@ def test_conversation_shapes():
     system, user = checks.conversation("Hi", "run1", "3", shared_system=True)
     assert system == checks.SHARED_SYSTEM and user.endswith("] Hi") and user.startswith("[")
     assert checks.conversation("Hi", None, "3") == (None, "Hi")
+
+
+def test_no_seed_unless_requested():
+    # a seed takes a request out of batching on mlx_lm.server
+    assert "seed" not in Client("http://x", model="m")._payload("Hi", True)
+    assert Client("http://x", model="m", seed=7)._payload("Hi", True)["seed"] == 7
+
+
+def test_shared_system_is_warmed_up_first():
+    sent = []
+
+    class Spy(Client):
+        def warm(self, prompt, system=None):
+            sent.append(("warm", system))
+            super().warm(prompt, system)
+
+        def record(self, prompt_id, prompt, system=None, companions=()):
+            sent.append(("record", system))
+            return super().record(prompt_id, prompt, system=system, companions=companions)
+
+    with MockServer(**FAST) as url:
+        checks.record_run(Spy(url, max_tokens=8), PROMPTS[:2], nonce="t", shared_system=True)
+        assert sent[0] == ("warm", checks.SHARED_SYSTEM) and [k for k, _ in sent].count("warm") == 1
+        sent.clear()
+        checks.record_run(Spy(url, max_tokens=8), PROMPTS[:2], nonce="t")
+        assert all(kind == "record" for kind, _ in sent)
