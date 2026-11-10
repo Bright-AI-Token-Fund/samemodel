@@ -1,0 +1,610 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18432",
+ "model": "mlx-community/Qwen2.5-0.5B-Instruct-bf16",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3612,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": 0.0625,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.978601997146933,
+   "scratch_hit_ratio": 0.06918687589158345,
+   "verdict": "identical",
+   "forks_detail": []
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 8,
+   "positions": 1818,
+   "argmax_agreement": 0.9878987898789879,
+   "max_logprob_diff": 0.625,
+   "kl_p50": 0.00032700748975057585,
+   "kl_p99": 0.005374475978615877,
+   "drift_p50": 0.0625,
+   "drift_p99": 0.25,
+   "forks": 22,
+   "fork_shift_p50": 0.125,
+   "fork_position_p50": 30,
+   "logprob_resolution": 0.0625,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p003",
+     "position": 36,
+     "token_a": "\u0120The",
+     "token_b": "<|im_end|>",
+     "margin_a": 0.0625,
+     "shift": 0.1875
+    },
+    {
+     "prompt_id": "p005",
+     "position": 106,
+     "token_a": "\u0120minutes",
+     "token_b": "-",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p009",
+     "position": 75,
+     "token_a": "\u0120established",
+     "token_b": "\u0120a",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p011",
+     "position": 47,
+     "token_a": "\u0120balanced",
+     "token_b": "\u0120tree",
+     "margin_a": 0.0625,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p013",
+     "position": 1,
+     "token_a": "\u0120French",
+     "token_b": "\u0120translation",
+     "margin_a": 0.0,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p015",
+     "position": 13,
+     "token_a": ",",
+     "token_b": "\u0120beauty",
+     "margin_a": 0.0,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p017",
+     "position": 50,
+     "token_a": "\u0120how",
+     "token_b": "\u0120the",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p019",
+     "position": 105,
+     "token_a": "\u0120Use",
+     "token_b": "\u0120Check",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p021",
+     "position": 16,
+     "token_a": "\u0120the",
+     "token_b": "\u0120what",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p023",
+     "position": 13,
+     "token_a": "\u0120a",
+     "token_b": "\u0120memory",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p027",
+     "position": 47,
+     "token_a": "\u0120(",
+     "token_b": "\u0120predictions",
+     "margin_a": 0.0,
+     "shift": 0.375
+    },
+    {
+     "prompt_id": "p031",
+     "position": 25,
+     "token_a": "\u0120resources",
+     "token_b": "\u0120available",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p033",
+     "position": 46,
+     "token_a": "\u0120processes",
+     "token_b": "\u0120operations",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p035",
+     "position": 14,
+     "token_a": "\u0120checks",
+     "token_b": "\u0120loads",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p037",
+     "position": 57,
+     "token_a": "^\\",
+     "token_b": "^",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p039",
+     "position": 63,
+     "token_a": "\u0120allowed",
+     "token_b": "\u0120present",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p041",
+     "position": 30,
+     "token_a": "\u0120flair",
+     "token_b": "\u0120smile",
+     "margin_a": 0.0625,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p045",
+     "position": 29,
+     "token_a": "\u0120in",
+     "token_b": "\u0120or",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p051",
+     "position": 28,
+     "token_a": "\u0120is",
+     "token_b": "\u0120works",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p053",
+     "position": 70,
+     "token_a": "services",
+     "token_b": "service",
+     "margin_a": 0.0625,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p055",
+     "position": 17,
+     "token_a": "\u0120their",
+     "token_b": "\u0120they",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p059",
+     "position": 20,
+     "token_a": "\u0120of",
+     "token_b": "\u0120and",
+     "margin_a": 0.0,
+     "shift": 0.125
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 15,
+   "positions": 3713,
+   "argmax_agreement": 0.987880420145435,
+   "max_logprob_diff": 1.0,
+   "kl_p50": 0.00020197325749494056,
+   "kl_p99": 0.006150010472899749,
+   "drift_p50": 0.0,
+   "drift_p99": 0.25,
+   "forks": 45,
+   "fork_shift_p50": 0.125,
+   "fork_position_p50": 32,
+   "logprob_resolution": 0.0625,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p000",
+     "position": 32,
+     "token_a": "\u0120certificate",
+     "token_b": "\u0120server",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p004",
+     "position": 15,
+     "token_a": "\u0120have",
+     "token_b": "\u0120serve",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p005",
+     "position": 106,
+     "token_a": "-",
+     "token_b": "\u0120minutes",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p006",
+     "position": 27,
+     "token_a": "\u0120represents",
+     "token_b": "\u0120provides",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p007",
+     "position": 13,
+     "token_a": "\u0120comments",
+     "token_b": "\u0120function",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p008",
+     "position": 21,
+     "token_a": "\u0120of",
+     "token_b": "\u0120is",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p009",
+     "position": 17,
+     "token_a": "\u0120packet",
+     "token_b": "\u0120segment",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p011",
+     "position": 47,
+     "token_a": "\u0120tree",
+     "token_b": "\u0120balanced",
+     "margin_a": 0.0,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p012",
+     "position": 39,
+     "token_a": "\u0120Paul",
+     "token_b": "\u0120Robert",
+     "margin_a": 0.0,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p013",
+     "position": 20,
+     "token_a": ":\u010a\u010a",
+     "token_b": ":\u010a",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p015",
+     "position": 13,
+     "token_a": "\u0120beauty",
+     "token_b": ",",
+     "margin_a": 0.0625,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p016",
+     "position": 107,
+     "token_a": "\u0120is",
+     "token_b": "\u0120can",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p017",
+     "position": 50,
+     "token_a": "\u0120the",
+     "token_b": "\u0120how",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p018",
+     "position": 16,
+     "token_a": "\u0120API",
+     "token_b": "\u0120Data",
+     "margin_a": 0.0625,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p019",
+     "position": 8,
+     "token_a": "\u0120allocating",
+     "token_b": "\u0120using",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p021",
+     "position": 56,
+     "token_a": "\u0120ocean",
+     "token_b": "\u0120Earth",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p022",
+     "position": 62,
+     "token_a": "\u0120High",
+     "token_b": "\u0120The",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p023",
+     "position": 105,
+     "token_a": "\u0120array",
+     "token_b": "\u0120dictionary",
+     "margin_a": 0.0,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p024",
+     "position": 15,
+     "token_a": "\u0120correct",
+     "token_b": "\u0120not",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p026",
+     "position": 40,
+     "token_a": "\u0120a",
+     "token_b": "\u0120an",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p027",
+     "position": 66,
+     "token_a": "\u0120follows",
+     "token_b": "\u0120the",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p030",
+     "position": 24,
+     "token_a": ".\u010a\u010a",
+     "token_b": ".\u010a",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p031",
+     "position": 25,
+     "token_a": "\u0120available",
+     "token_b": "\u0120resources",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p032",
+     "position": 76,
+     "token_a": "\u0120Whether",
+     "token_b": "\u0120The",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p033",
+     "position": 66,
+     "token_a": "\u0120mechanisms",
+     "token_b": "\u0120execution",
+     "margin_a": 0.25,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p035",
+     "position": 127,
+     "token_a": "\u0120is",
+     "token_b": "\u0120will",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p036",
+     "position": 41,
+     "token_a": "\u0120performance",
+     "token_b": "\u0120speed",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p037",
+     "position": 112,
+     "token_a": "-",
+     "token_b": "1",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p038",
+     "position": 26,
+     "token_a": "\u0120and",
+     "token_b": ".",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p039",
+     "position": 63,
+     "token_a": "\u0120present",
+     "token_b": "\u0120allowed",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p040",
+     "position": 100,
+     "token_a": "\u0120is",
+     "token_b": "\u0120means",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p042",
+     "position": 33,
+     "token_a": "\u0120stimulates",
+     "token_b": "\u0120triggers",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p043",
+     "position": 45,
+     "token_a": "\u0120of",
+     "token_b": "\u0120and",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p044",
+     "position": 57,
+     "token_a": "\u0120also",
+     "token_b": "\u0120often",
+     "margin_a": 0.0,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p045",
+     "position": 29,
+     "token_a": "\u0120or",
+     "token_b": "\u0120in",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p048",
+     "position": 15,
+     "token_a": "\u0120The",
+     "token_b": "\u0120This",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p050",
+     "position": 20,
+     "token_a": ",",
+     "token_b": ":",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p051",
+     "position": 106,
+     "token_a": "\u0120generate",
+     "token_b": "\u0120focus",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p052",
+     "position": 7,
+     "token_a": "\u0120by",
+     "token_b": "\u0120automatically",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p053",
+     "position": 70,
+     "token_a": "service",
+     "token_b": "services",
+     "margin_a": 0.0,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p054",
+     "position": 14,
+     "token_a": "\u0120both",
+     "token_b": "\u0120two",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p055",
+     "position": 7,
+     "token_a": "\u0120two",
+     "token_b": "\u0120multiple",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p057",
+     "position": 16,
+     "token_a": "\u0120number",
+     "token_b": "\u0120amount",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p058",
+     "position": 15,
+     "token_a": "\u0120checking",
+     "token_b": "\u0120verification",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p059",
+     "position": 20,
+     "token_a": "\u0120and",
+     "token_b": "\u0120of",
+     "margin_a": 0.125,
+     "shift": 0.125
+    }
+   ]
+  }
+ }
+}

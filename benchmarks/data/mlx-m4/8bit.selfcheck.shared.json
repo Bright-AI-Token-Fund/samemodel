@@ -1,0 +1,162 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18432",
+ "model": "mlx-community/Qwen2.5-0.5B-Instruct-8bit",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": true,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3505,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9757869249394673,
+   "scratch_hit_ratio": 0.3611783696529459,
+   "verdict": "identical",
+   "forks_detail": []
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 25,
+   "positions": 2906,
+   "argmax_agreement": 0.9982794218857536,
+   "max_logprob_diff": 0.0625,
+   "kl_p50": 4.697156162673671e-06,
+   "kl_p99": 8.777362725838201e-05,
+   "drift_p50": 0.0078125,
+   "drift_p99": 0.03125,
+   "forks": 5,
+   "fork_shift_p50": 0.015625,
+   "fork_position_p50": 13,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p005",
+     "position": 38,
+     "token_a": "2",
+     "token_b": "1",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p019",
+     "position": 8,
+     "token_a": "\u0120using",
+     "token_b": "\u0120allocating",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p021",
+     "position": 8,
+     "token_a": "\u0120occurs",
+     "token_b": "\u0120involves",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p053",
+     "position": 40,
+     "token_a": "\u0120origin",
+     "token_b": "\u0120server",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p059",
+     "position": 13,
+     "token_a": "1",
+     "token_b": "\u0120",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 54,
+   "positions": 6591,
+   "argmax_agreement": 0.999089667728721,
+   "max_logprob_diff": 0.140625,
+   "kl_p50": 3.7232971151634564e-06,
+   "kl_p99": 8.751284909241976e-05,
+   "drift_p50": 0.0078125,
+   "drift_p99": 0.03125,
+   "forks": 6,
+   "fork_shift_p50": 0.015625,
+   "fork_position_p50": 40,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p005",
+     "position": 38,
+     "token_a": "1",
+     "token_b": "2",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p006",
+     "position": 66,
+     "token_a": "\u0120with",
+     "token_b": "\u0120accessing",
+     "margin_a": 0.015625,
+     "shift": 0.03125
+    },
+    {
+     "prompt_id": "p036",
+     "position": 87,
+     "token_a": "\u0120speed",
+     "token_b": "\u0120ability",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p046",
+     "position": 121,
+     "token_a": "\u0120the",
+     "token_b": "\u0120a",
+     "margin_a": 0.015625,
+     "shift": 0.03125
+    },
+    {
+     "prompt_id": "p053",
+     "position": 40,
+     "token_a": "\u0120server",
+     "token_b": "\u0120origin",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p059",
+     "position": 13,
+     "token_a": "\u0120",
+     "token_b": "1",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    }
+   ]
+  }
+ }
+}

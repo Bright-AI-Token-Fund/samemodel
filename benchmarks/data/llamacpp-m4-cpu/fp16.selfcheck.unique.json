@@ -1,0 +1,146 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-fp16",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 25,
+   "positions": 3324,
+   "argmax_agreement": 0.9984957882069796,
+   "max_logprob_diff": 0.028105735778808594,
+   "kl_p50": 1.379063099349007e-07,
+   "kl_p99": 4.380533495804396e-06,
+   "drift_p50": 0.0014399886131286621,
+   "drift_p99": 0.010196566581726074,
+   "forks": 5,
+   "fork_shift_p50": 0.0021686553955078125,
+   "fork_position_p50": 105,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9787158566867683,
+   "scratch_hit_ratio": 0.0652713728272437,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p012",
+     "position": 105,
+     "token_a": " are",
+     "token_b": " have",
+     "margin_a": 0.0012720823287963867,
+     "shift": 0.0016230344772338867
+    },
+    {
+     "prompt_id": "p014",
+     "position": 92,
+     "token_a": " already",
+     "token_b": " ",
+     "margin_a": 0.0036620497703552246,
+     "shift": 0.010236620903015137
+    },
+    {
+     "prompt_id": "p016",
+     "position": 1,
+     "token_a": " command",
+     "token_b": " `",
+     "margin_a": 0.0001621246337890625,
+     "shift": 0.0015392899513244629
+    },
+    {
+     "prompt_id": "p050",
+     "position": 123,
+     "token_a": " incidents",
+     "token_b": " actions",
+     "margin_a": 0.001621246337890625,
+     "shift": 0.0021686553955078125
+    },
+    {
+     "prompt_id": "p056",
+     "position": 126,
+     "token_a": " Loop",
+     "token_b": " Merge",
+     "margin_a": 0.002040863037109375,
+     "shift": 0.0035134553909301758
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 29,
+   "positions": 3292,
+   "argmax_agreement": 0.9996962332928311,
+   "max_logprob_diff": 0.03148174285888672,
+   "kl_p50": 1.9790399397155423e-07,
+   "kl_p99": 4.649511376175043e-06,
+   "drift_p50": 0.0014187688939273357,
+   "drift_p99": 0.00835752533748746,
+   "forks": 1,
+   "fork_shift_p50": 0.0011396408081054688,
+   "fork_position_p50": 110,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p011",
+     "position": 110,
+     "token_a": " linked",
+     "token_b": " hash",
+     "margin_a": 0.0005083084106445312,
+     "shift": 0.0011396408081054688
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 57,
+   "positions": 6778,
+   "argmax_agreement": 0.9995573915609324,
+   "max_logprob_diff": 0.030336380004882812,
+   "kl_p50": 1.676996957329309e-07,
+   "kl_p99": 4.4166141398812555e-06,
+   "drift_p50": 0.001449704184778966,
+   "drift_p99": 0.009448885917663574,
+   "forks": 3,
+   "fork_shift_p50": 0.0023374557495117188,
+   "fork_position_p50": 110,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p011",
+     "position": 110,
+     "token_a": " hash",
+     "token_b": " linked",
+     "margin_a": 0.0006313323974609375,
+     "shift": 0.0023374557495117188
+    },
+    {
+     "prompt_id": "p012",
+     "position": 105,
+     "token_a": " have",
+     "token_b": " are",
+     "margin_a": 0.0003509521484375,
+     "shift": 0.001674652099609375
+    },
+    {
+     "prompt_id": "p050",
+     "position": 123,
+     "token_a": " actions",
+     "token_b": " incidents",
+     "margin_a": 0.0005474090576171875,
+     "shift": 0.0040493011474609375
+    }
+   ]
+  }
+ }
+}

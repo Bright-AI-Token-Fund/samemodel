@@ -1,0 +1,426 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-q4_k_m",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 26,
+   "positions": 3305,
+   "argmax_agreement": 0.9987897125567322,
+   "max_logprob_diff": 0.07522821426391602,
+   "kl_p50": 3.3824046749812127e-07,
+   "kl_p99": 2.690294460644548e-05,
+   "drift_p50": 0.0026244521141052246,
+   "drift_p99": 0.02038583904504776,
+   "forks": 4,
+   "fork_shift_p50": 0.004840850830078125,
+   "fork_position_p50": 33,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.978708303761533,
+   "scratch_hit_ratio": 0.06352022711142655,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p008",
+     "position": 33,
+     "token_a": " Earth",
+     "token_b": " atmosphere",
+     "margin_a": 0.0014247894287109375,
+     "shift": 0.004840850830078125
+    },
+    {
+     "prompt_id": "p026",
+     "position": 0,
+     "token_a": "To",
+     "token_b": "De",
+     "margin_a": 0.0073833465576171875,
+     "shift": 0.020574569702148438
+    },
+    {
+     "prompt_id": "p038",
+     "position": 50,
+     "token_a": " original",
+     "token_b": " previous",
+     "margin_a": 0.0013846158981323242,
+     "shift": 0.0028208494186401367
+    },
+    {
+     "prompt_id": "p052",
+     "position": 6,
+     "token_a": " handled",
+     "token_b": " a",
+     "margin_a": 0.0031890869140625,
+     "shift": 0.0035228729248046875
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 14,
+   "positions": 2478,
+   "argmax_agreement": 0.993543179983858,
+   "max_logprob_diff": 0.29264354705810547,
+   "kl_p50": 2.6213648082739114e-05,
+   "kl_p99": 0.0004314492488633611,
+   "drift_p50": 0.015130937099456787,
+   "drift_p99": 0.0820387601852417,
+   "forks": 16,
+   "fork_shift_p50": 0.025480270385742188,
+   "fork_position_p50": 42,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p001",
+     "position": 25,
+     "token_a": " a",
+     "token_b": " an",
+     "margin_a": 0.002445220947265625,
+     "shift": 0.02167510986328125
+    },
+    {
+     "prompt_id": "p005",
+     "position": 113,
+     "token_a": " the",
+     "token_b": " slightly",
+     "margin_a": 0.012713432312011719,
+     "shift": 0.03257179260253906
+    },
+    {
+     "prompt_id": "p007",
+     "position": 42,
+     "token_a": " for",
+     "token_b": " or",
+     "margin_a": 0.0013484954833984375,
+     "shift": 0.025480270385742188
+    },
+    {
+     "prompt_id": "p009",
+     "position": 33,
+     "token_a": " Ack",
+     "token_b": " and",
+     "margin_a": 0.07717132568359375,
+     "shift": 0.10179316997528076
+    },
+    {
+     "prompt_id": "p011",
+     "position": 122,
+     "token_a": " also",
+     "token_b": " are",
+     "margin_a": 2.658367156982422e-05,
+     "shift": 0.0022524595260620117
+    },
+    {
+     "prompt_id": "p013",
+     "position": 42,
+     "token_a": " am",
+     "token_b": " ein",
+     "margin_a": 0.022121429443359375,
+     "shift": 0.026581764221191406
+    },
+    {
+     "prompt_id": "p021",
+     "position": 47,
+     "token_a": ".",
+     "token_b": ".\n\n",
+     "margin_a": 0.00986868143081665,
+     "shift": 0.023420393466949463
+    },
+    {
+     "prompt_id": "p023",
+     "position": 62,
+     "token_a": " memory",
+     "token_b": " data",
+     "margin_a": 0.026948928833007812,
+     "shift": 0.031642913818359375
+    },
+    {
+     "prompt_id": "p025",
+     "position": 30,
+     "token_a": " it",
+     "token_b": " them",
+     "margin_a": 0.0018329620361328125,
+     "shift": 0.0067043304443359375
+    },
+    {
+     "prompt_id": "p029",
+     "position": 36,
+     "token_a": "8",
+     "token_b": " ",
+     "margin_a": 0.04243558645248413,
+     "shift": 0.17381852865219116
+    },
+    {
+     "prompt_id": "p039",
+     "position": 32,
+     "token_a": "1",
+     "token_b": " ",
+     "margin_a": 0.032096922397613525,
+     "shift": 0.05350309610366821
+    },
+    {
+     "prompt_id": "p043",
+     "position": 114,
+     "token_a": " running",
+     "token_b": " completed",
+     "margin_a": 0.0192643404006958,
+     "shift": 0.02035343647003174
+    },
+    {
+     "prompt_id": "p045",
+     "position": 58,
+     "token_a": " in",
+     "token_b": ",",
+     "margin_a": 0.013319015502929688,
+     "shift": 0.028131484985351562
+    },
+    {
+     "prompt_id": "p049",
+     "position": 75,
+     "token_a": ".",
+     "token_b": ".\n\n",
+     "margin_a": 0.0010374784469604492,
+     "shift": 0.010095477104187012
+    },
+    {
+     "prompt_id": "p055",
+     "position": 34,
+     "token_a": " access",
+     "token_b": " are",
+     "margin_a": 0.002101898193359375,
+     "shift": 0.0157853364944458
+    },
+    {
+     "prompt_id": "p057",
+     "position": 19,
+     "token_a": " file",
+     "token_b": " database",
+     "margin_a": 0.0016021728515625,
+     "shift": 0.0074329376220703125
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 36,
+   "positions": 5364,
+   "argmax_agreement": 0.9955257270693513,
+   "max_logprob_diff": 0.3056144714355469,
+   "kl_p50": 1.5544085421031995e-05,
+   "kl_p99": 0.000471318284720162,
+   "drift_p50": 0.014623448252677917,
+   "drift_p99": 0.08912904205499217,
+   "forks": 24,
+   "fork_shift_p50": 0.021923065185546875,
+   "fork_position_p50": 36,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p001",
+     "position": 25,
+     "token_a": " an",
+     "token_b": " a",
+     "margin_a": 0.019229888916015625,
+     "shift": 0.021923065185546875
+    },
+    {
+     "prompt_id": "p005",
+     "position": 113,
+     "token_a": " slightly",
+     "token_b": " the",
+     "margin_a": 0.019858360290527344,
+     "shift": 0.03257179260253906
+    },
+    {
+     "prompt_id": "p006",
+     "position": 27,
+     "token_a": " multiple",
+     "token_b": " other",
+     "margin_a": 0.006038784980773926,
+     "shift": 0.04736530780792236
+    },
+    {
+     "prompt_id": "p008",
+     "position": 33,
+     "token_a": " atmosphere",
+     "token_b": " Earth",
+     "margin_a": 0.0034160614013671875,
+     "shift": 0.008199691772460938
+    },
+    {
+     "prompt_id": "p009",
+     "position": 33,
+     "token_a": " and",
+     "token_b": " Ack",
+     "margin_a": 0.02462184429168701,
+     "shift": 0.10187709331512451
+    },
+    {
+     "prompt_id": "p011",
+     "position": 122,
+     "token_a": " are",
+     "token_b": " also",
+     "margin_a": 0.0022258758544921875,
+     "shift": 0.007572174072265625
+    },
+    {
+     "prompt_id": "p012",
+     "position": 62,
+     "token_a": " can",
+     "token_b": " are",
+     "margin_a": 0.013114869594573975,
+     "shift": 0.014696002006530762
+    },
+    {
+     "prompt_id": "p013",
+     "position": 42,
+     "token_a": " ein",
+     "token_b": " am",
+     "margin_a": 0.004460334777832031,
+     "shift": 0.026581764221191406
+    },
+    {
+     "prompt_id": "p018",
+     "position": 16,
+     "token_a": " Data",
+     "token_b": " API",
+     "margin_a": 0.00426483154296875,
+     "shift": 0.0063800811767578125
+    },
+    {
+     "prompt_id": "p021",
+     "position": 47,
+     "token_a": ".\n\n",
+     "token_b": ".",
+     "margin_a": 0.013551712036132812,
+     "shift": 0.023420393466949463
+    },
+    {
+     "prompt_id": "p023",
+     "position": 62,
+     "token_a": " data",
+     "token_b": " memory",
+     "margin_a": 0.0046939849853515625,
+     "shift": 0.03217899799346924
+    },
+    {
+     "prompt_id": "p025",
+     "position": 30,
+     "token_a": " them",
+     "token_b": " it",
+     "margin_a": 0.004871368408203125,
+     "shift": 0.0067043304443359375
+    },
+    {
+     "prompt_id": "p026",
+     "position": 0,
+     "token_a": "De",
+     "token_b": "To",
+     "margin_a": 0.01319122314453125,
+     "shift": 0.018262863159179688
+    },
+    {
+     "prompt_id": "p028",
+     "position": 6,
+     "token_a": " is",
+     "token_b": " resolution",
+     "margin_a": 0.034580230712890625,
+     "shift": 0.036910951137542725
+    },
+    {
+     "prompt_id": "p029",
+     "position": 36,
+     "token_a": " ",
+     "token_b": "8",
+     "margin_a": 0.13138294219970703,
+     "shift": 0.17381852865219116
+    },
+    {
+     "prompt_id": "p032",
+     "position": 75,
+     "token_a": " use",
+     "token_b": " short",
+     "margin_a": 0.004924774169921875,
+     "shift": 0.053066253662109375
+    },
+    {
+     "prompt_id": "p036",
+     "position": 28,
+     "token_a": " range",
+     "token_b": " scale",
+     "margin_a": 0.0058460235595703125,
+     "shift": 0.0162200927734375
+    },
+    {
+     "prompt_id": "p038",
+     "position": 40,
+     "token_a": " that",
+     "token_b": ",",
+     "margin_a": 0.007196485996246338,
+     "shift": 0.010433197021484375
+    },
+    {
+     "prompt_id": "p039",
+     "position": 32,
+     "token_a": " ",
+     "token_b": "1",
+     "margin_a": 0.021406173706054688,
+     "shift": 0.05360597372055054
+    },
+    {
+     "prompt_id": "p043",
+     "position": 114,
+     "token_a": " completed",
+     "token_b": " running",
+     "margin_a": 0.0010890960693359375,
+     "shift": 0.018644332885742188
+    },
+    {
+     "prompt_id": "p045",
+     "position": 58,
+     "token_a": ",",
+     "token_b": " in",
+     "margin_a": 0.014812469482421875,
+     "shift": 0.03058624267578125
+    },
+    {
+     "prompt_id": "p049",
+     "position": 75,
+     "token_a": ".\n\n",
+     "token_b": ".",
+     "margin_a": 0.009057998657226562,
+     "shift": 0.0098419189453125
+    },
+    {
+     "prompt_id": "p055",
+     "position": 34,
+     "token_a": " are",
+     "token_b": " access",
+     "margin_a": 0.013683438301086426,
+     "shift": 0.0157853364944458
+    },
+    {
+     "prompt_id": "p057",
+     "position": 19,
+     "token_a": " database",
+     "token_b": " file",
+     "margin_a": 0.0058307647705078125,
+     "shift": 0.0065135955810546875
+    }
+   ]
+  }
+ }
+}

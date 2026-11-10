@@ -1,0 +1,122 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-fp16",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 29,
+   "positions": 3465,
+   "argmax_agreement": 0.9997113997113997,
+   "max_logprob_diff": 0.0309600830078125,
+   "kl_p50": 1.5613555486340703e-07,
+   "kl_p99": 5.261489217189656e-06,
+   "drift_p50": 0.0015505552291870117,
+   "drift_p99": 0.009643317520385608,
+   "forks": 1,
+   "fork_shift_p50": 0.003299713134765625,
+   "fork_position_p50": 30,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9786476868327402,
+   "scratch_hit_ratio": 0.06441281138790035,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p038",
+     "position": 30,
+     "token_a": " and",
+     "token_b": ".",
+     "margin_a": 0.002323150634765625,
+     "shift": 0.003299713134765625
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 28,
+   "positions": 3125,
+   "argmax_agreement": 0.99936,
+   "max_logprob_diff": 0.03318977355957031,
+   "kl_p50": 1.6107885811253055e-07,
+   "kl_p99": 4.8708881034103095e-06,
+   "drift_p50": 0.0013788938522338867,
+   "drift_p99": 0.010091785457916558,
+   "forks": 2,
+   "fork_shift_p50": 0.0008296966552734375,
+   "fork_position_p50": 15,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p003",
+     "position": 19,
+     "token_a": " rise",
+     "token_b": " decline",
+     "margin_a": 0.00012111663818359375,
+     "shift": 0.0008296966552734375
+    },
+    {
+     "prompt_id": "p023",
+     "position": 15,
+     "token_a": " of",
+     "token_b": " during",
+     "margin_a": 0.000881195068359375,
+     "shift": 0.0017775297164916992
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 57,
+   "positions": 6613,
+   "argmax_agreement": 0.9995463481022229,
+   "max_logprob_diff": 0.039603233337402344,
+   "kl_p50": 1.3210783230949973e-07,
+   "kl_p99": 4.6409168683281e-06,
+   "drift_p50": 0.0013465494848787785,
+   "drift_p99": 0.009813274256885052,
+   "forks": 3,
+   "fork_shift_p50": 0.0010395050048828125,
+   "fork_position_p50": 30,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p003",
+     "position": 19,
+     "token_a": " decline",
+     "token_b": " rise",
+     "margin_a": 0.0007085800170898438,
+     "shift": 0.0008296966552734375
+    },
+    {
+     "prompt_id": "p010",
+     "position": 38,
+     "token_a": " This",
+     "token_b": " For",
+     "margin_a": 0.001148223876953125,
+     "shift": 0.0014247894287109375
+    },
+    {
+     "prompt_id": "p038",
+     "position": 30,
+     "token_a": ".",
+     "token_b": " and",
+     "margin_a": 0.0009765625,
+     "shift": 0.0010395050048828125
+    }
+   ]
+  }
+ }
+}

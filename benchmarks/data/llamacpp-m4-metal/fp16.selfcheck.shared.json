@@ -1,0 +1,89 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-fp16",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": true,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3427,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.041319847106933594,
+   "kl_p50": 1.2397065107185947e-07,
+   "kl_p99": 4.822276056721067e-06,
+   "drift_p50": 0.0015812516212463379,
+   "drift_p99": 0.010224699992249953,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9758162031438936,
+   "scratch_hit_ratio": 0.3599355098750504,
+   "verdict": "noise",
+   "forks_detail": []
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3414,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0221710205078125,
+   "kl_p50": 1.7177974887590156e-07,
+   "kl_p99": 4.836267123334366e-06,
+   "drift_p50": 0.0013771355152130127,
+   "drift_p99": 0.009506285190582275,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": []
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 58,
+   "positions": 6726,
+   "argmax_agreement": 0.999702646446625,
+   "max_logprob_diff": 0.030414581298828125,
+   "kl_p50": 1.4778080986618287e-07,
+   "kl_p99": 5.769641192547528e-06,
+   "drift_p50": 0.0014629368670284748,
+   "drift_p99": 0.011414885530030006,
+   "forks": 2,
+   "fork_shift_p50": 0.000942230224609375,
+   "fork_position_p50": 28,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p026",
+     "position": 111,
+     "token_a": "}\n\n",
+     "token_b": "}\n",
+     "margin_a": 0.000682830810546875,
+     "shift": 0.000942230224609375
+    },
+    {
+     "prompt_id": "p043",
+     "position": 28,
+     "token_a": " includes",
+     "token_b": " can",
+     "margin_a": 0.00606536865234375,
+     "shift": 0.0071544647216796875
+    }
+   ]
+  }
+ }
+}

@@ -71,7 +71,11 @@ def brief(s):
     if v == "identical":
         return "identical"
     changed = s["prompts"] - s["identical_outputs"]
-    return f"{v}: {changed} of {s['prompts']} answers changed, drift {num(s['drift_p50'])}"
+    if s.get("logprob_resolution"):  # drift is quantised by the grid: show the agreement instead
+        size = f"argmax {pct(s['argmax_agreement'])}"
+    else:
+        size = f"drift {num(s['drift_p50'])}"
+    return f"{v}: {changed} of {s['prompts']} answers changed, {size}"
 
 
 def cmd_overview(args):

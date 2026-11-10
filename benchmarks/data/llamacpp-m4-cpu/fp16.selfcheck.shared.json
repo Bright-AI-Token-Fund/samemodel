@@ -1,0 +1,139 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-fp16",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": true,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 28,
+   "positions": 3513,
+   "argmax_agreement": 0.9994306860233418,
+   "max_logprob_diff": 0.03270435333251953,
+   "kl_p50": 1.0382118225330852e-07,
+   "kl_p99": 4.774162672125421e-06,
+   "drift_p50": 0.001407962292432785,
+   "drift_p99": 0.009822845458984375,
+   "forks": 2,
+   "fork_shift_p50": 0.0003070831298828125,
+   "fork_position_p50": 66,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9759036144578314,
+   "scratch_hit_ratio": 0.357429718875502,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p012",
+     "position": 118,
+     "token_a": " transactions",
+     "token_b": "0",
+     "margin_a": 0.0007915496826171875,
+     "shift": 0.0009670257568359375
+    },
+    {
+     "prompt_id": "p036",
+     "position": 66,
+     "token_a": " format",
+     "token_b": " range",
+     "margin_a": 0.0001621246337890625,
+     "shift": 0.0003070831298828125
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 27,
+   "positions": 3322,
+   "argmax_agreement": 0.9990969295605057,
+   "max_logprob_diff": 0.042446136474609375,
+   "kl_p50": 1.6649059595356808e-07,
+   "kl_p99": 5.056137319959044e-06,
+   "drift_p50": 0.0014094114303588867,
+   "drift_p99": 0.009084701538085938,
+   "forks": 3,
+   "fork_shift_p50": 0.0051116943359375,
+   "fork_position_p50": 108,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p019",
+     "position": 36,
+     "token_a": " program",
+     "token_b": " memory",
+     "margin_a": 0.0005683302879333496,
+     "shift": 0.0034598112106323242
+    },
+    {
+     "prompt_id": "p023",
+     "position": 113,
+     "token_a": " where",
+     "token_b": " and",
+     "margin_a": 0.0017337799072265625,
+     "shift": 0.0051116943359375
+    },
+    {
+     "prompt_id": "p031",
+     "position": 108,
+     "token_a": " it",
+     "token_b": " data",
+     "margin_a": 0.004611968994140625,
+     "shift": 0.005435943603515625
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 57,
+   "positions": 6863,
+   "argmax_agreement": 0.9995628733789887,
+   "max_logprob_diff": 0.032187461853027344,
+   "kl_p50": 1.4803538384340704e-07,
+   "kl_p99": 4.901115338934099e-06,
+   "drift_p50": 0.0014839023351669312,
+   "drift_p99": 0.009584493935108185,
+   "forks": 3,
+   "fork_shift_p50": 0.0036677122116088867,
+   "fork_position_p50": 66,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p019",
+     "position": 36,
+     "token_a": " memory",
+     "token_b": " program",
+     "margin_a": 0.0028914809226989746,
+     "shift": 0.0036677122116088867
+    },
+    {
+     "prompt_id": "p023",
+     "position": 113,
+     "token_a": " and",
+     "token_b": " where",
+     "margin_a": 0.0033779144287109375,
+     "shift": 0.0051116943359375
+    },
+    {
+     "prompt_id": "p036",
+     "position": 66,
+     "token_a": " range",
+     "token_b": " format",
+     "margin_a": 0.00014495849609375,
+     "shift": 0.0015239715576171875
+    }
+   ]
+  }
+ }
+}

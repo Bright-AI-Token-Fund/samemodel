@@ -1,0 +1,299 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-q4_k_m",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": true,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 28,
+   "positions": 3460,
+   "argmax_agreement": 0.999421965317919,
+   "max_logprob_diff": 0.08978605270385742,
+   "kl_p50": 3.5833938359279416e-07,
+   "kl_p99": 2.454401200222449e-05,
+   "drift_p50": 0.002736896276473999,
+   "drift_p99": 0.020448759198188782,
+   "forks": 2,
+   "fork_shift_p50": 0.007282376289367676,
+   "fork_position_p50": 21,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9758551307847082,
+   "scratch_hit_ratio": 0.35774647887323946,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p042",
+     "position": 23,
+     "token_a": " which",
+     "token_b": " such",
+     "margin_a": 0.0032501220703125,
+     "shift": 0.007282376289367676
+    },
+    {
+     "prompt_id": "p052",
+     "position": 21,
+     "token_a": " Go",
+     "token_b": " program",
+     "margin_a": 0.00048828125,
+     "shift": 0.0097198486328125
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 20,
+   "positions": 2759,
+   "argmax_agreement": 0.9963754983689742,
+   "max_logprob_diff": 0.28946423530578613,
+   "kl_p50": 2.2428517410432827e-05,
+   "kl_p99": 0.0005108325811238919,
+   "drift_p50": 0.01458330824971199,
+   "drift_p99": 0.08044683936532238,
+   "forks": 10,
+   "fork_shift_p50": 0.027784228324890137,
+   "fork_position_p50": 34,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p005",
+     "position": 90,
+     "token_a": " Heat",
+     "token_b": " In",
+     "margin_a": 0.03989595174789429,
+     "shift": 0.049961090087890625
+    },
+    {
+     "prompt_id": "p011",
+     "position": 36,
+     "token_a": " maintenance",
+     "token_b": " storage",
+     "margin_a": 0.015363812446594238,
+     "shift": 0.036823391914367676
+    },
+    {
+     "prompt_id": "p013",
+     "position": 39,
+     "token_a": "ch",
+     "token_b": "gen",
+     "margin_a": 0.03143298625946045,
+     "shift": 0.03236579895019531
+    },
+    {
+     "prompt_id": "p017",
+     "position": 18,
+     "token_a": " st",
+     "token_b": " the",
+     "margin_a": 0.06146049499511719,
+     "shift": 0.08265304565429688
+    },
+    {
+     "prompt_id": "p019",
+     "position": 78,
+     "token_a": " your",
+     "token_b": " a",
+     "margin_a": 0.0111236572265625,
+     "shift": 0.027784228324890137
+    },
+    {
+     "prompt_id": "p021",
+     "position": 34,
+     "token_a": " global",
+     "token_b": " regular",
+     "margin_a": 0.0102691650390625,
+     "shift": 0.016315460205078125
+    },
+    {
+     "prompt_id": "p025",
+     "position": 30,
+     "token_a": " it",
+     "token_b": " them",
+     "margin_a": 0.0023632049560546875,
+     "shift": 0.016813278198242188
+    },
+    {
+     "prompt_id": "p031",
+     "position": 88,
+     "token_a": "load",
+     "token_b": "head",
+     "margin_a": 0.001590728759765625,
+     "shift": 0.018606185913085938
+    },
+    {
+     "prompt_id": "p037",
+     "position": 1,
+     "token_a": " ISO",
+     "token_b": " regular",
+     "margin_a": 0.00940704345703125,
+     "shift": 0.018060684204101562
+    },
+    {
+     "prompt_id": "p049",
+     "position": 30,
+     "token_a": ",",
+     "token_b": " that",
+     "margin_a": 0.01963984966278076,
+     "shift": 0.0462493896484375
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 44,
+   "positions": 5977,
+   "argmax_agreement": 0.997323071775138,
+   "max_logprob_diff": 0.2778053283691406,
+   "kl_p50": 1.5309593253233487e-05,
+   "kl_p99": 0.0004970892032028881,
+   "drift_p50": 0.014883101917803288,
+   "drift_p99": 0.0868039857596159,
+   "forks": 16,
+   "fork_shift_p50": 0.036823391914367676,
+   "fork_position_p50": 36,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p000",
+     "position": 17,
+     "token_a": " certificate",
+     "token_b": " secure",
+     "margin_a": 0.049526214599609375,
+     "shift": 0.054355621337890625
+    },
+    {
+     "prompt_id": "p005",
+     "position": 90,
+     "token_a": " In",
+     "token_b": " Heat",
+     "margin_a": 0.010065138339996338,
+     "shift": 0.05554777383804321
+    },
+    {
+     "prompt_id": "p011",
+     "position": 36,
+     "token_a": " storage",
+     "token_b": " maintenance",
+     "margin_a": 0.021459579467773438,
+     "shift": 0.036823391914367676
+    },
+    {
+     "prompt_id": "p013",
+     "position": 39,
+     "token_a": "gen",
+     "token_b": "ch",
+     "margin_a": 0.0009328126907348633,
+     "shift": 0.03236579895019531
+    },
+    {
+     "prompt_id": "p017",
+     "position": 18,
+     "token_a": " the",
+     "token_b": " st",
+     "margin_a": 0.021192550659179688,
+     "shift": 0.078582763671875
+    },
+    {
+     "prompt_id": "p019",
+     "position": 78,
+     "token_a": " a",
+     "token_b": " your",
+     "margin_a": 0.016660571098327637,
+     "shift": 0.027784228324890137
+    },
+    {
+     "prompt_id": "p021",
+     "position": 34,
+     "token_a": " regular",
+     "token_b": " global",
+     "margin_a": 0.006046295166015625,
+     "shift": 0.016315460205078125
+    },
+    {
+     "prompt_id": "p025",
+     "position": 30,
+     "token_a": " them",
+     "token_b": " it",
+     "margin_a": 0.0144500732421875,
+     "shift": 0.016813278198242188
+    },
+    {
+     "prompt_id": "p026",
+     "position": 13,
+     "token_a": "deb",
+     "token_b": "set",
+     "margin_a": 0.0282745361328125,
+     "shift": 0.05282783508300781
+    },
+    {
+     "prompt_id": "p031",
+     "position": 88,
+     "token_a": "head",
+     "token_b": "load",
+     "margin_a": 0.017015457153320312,
+     "shift": 0.018610000610351562
+    },
+    {
+     "prompt_id": "p036",
+     "position": 59,
+     "token_a": " handled",
+     "token_b": " stored",
+     "margin_a": 0.036914825439453125,
+     "shift": 0.043712615966796875
+    },
+    {
+     "prompt_id": "p037",
+     "position": 1,
+     "token_a": " regular",
+     "token_b": " ISO",
+     "margin_a": 0.008653640747070312,
+     "shift": 0.018060684204101562
+    },
+    {
+     "prompt_id": "p040",
+     "position": 94,
+     "token_a": " can",
+     "token_b": " is",
+     "margin_a": 0.036590576171875,
+     "shift": 0.04123497009277344
+    },
+    {
+     "prompt_id": "p042",
+     "position": 23,
+     "token_a": " such",
+     "token_b": " which",
+     "margin_a": 0.004032254219055176,
+     "shift": 0.012533187866210938
+    },
+    {
+     "prompt_id": "p046",
+     "position": 103,
+     "token_a": " Bubble",
+     "token_b": " It",
+     "margin_a": 0.0035208463668823242,
+     "shift": 0.0206679105758667
+    },
+    {
+     "prompt_id": "p049",
+     "position": 30,
+     "token_a": " that",
+     "token_b": ",",
+     "margin_a": 0.02660953998565674,
+     "shift": 0.04675698280334473
+    }
+   ]
+  }
+ }
+}

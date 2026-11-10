@@ -1,0 +1,210 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18432",
+ "model": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3632,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9786096256684492,
+   "scratch_hit_ratio": 0.06844919786096257,
+   "verdict": "identical",
+   "forks_detail": []
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 23,
+   "positions": 3224,
+   "argmax_agreement": 0.9978287841191067,
+   "max_logprob_diff": 0.0703125,
+   "kl_p50": 5.9039983030126835e-06,
+   "kl_p99": 9.08647943807694e-05,
+   "drift_p50": 0.0,
+   "drift_p99": 0.03125,
+   "forks": 7,
+   "fork_shift_p50": 0.015625,
+   "fork_position_p50": 78,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p007",
+     "position": 33,
+     "token_a": "\u0120Group",
+     "token_b": "\u0120Break",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p009",
+     "position": 90,
+     "token_a": "After",
+     "token_b": "The",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p035",
+     "position": 80,
+     "token_a": "\u0120use",
+     "token_b": "\u0120now",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p039",
+     "position": 78,
+     "token_a": "\u0120translates",
+     "token_b": "\u0120generates",
+     "margin_a": 0.03125,
+     "shift": 0.03125
+    },
+    {
+     "prompt_id": "p045",
+     "position": 63,
+     "token_a": "\u0120or",
+     "token_b": ".",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p049",
+     "position": 84,
+     "token_a": "\u0120how",
+     "token_b": "\u0120the",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p055",
+     "position": 38,
+     "token_a": "\u0120results",
+     "token_b": "\u0120and",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 50,
+   "positions": 6699,
+   "argmax_agreement": 0.9985072398865502,
+   "max_logprob_diff": 0.078125,
+   "kl_p50": 4.921984862156223e-06,
+   "kl_p99": 9.050735822809727e-05,
+   "drift_p50": 0.0,
+   "drift_p99": 0.03125,
+   "forks": 10,
+   "fork_shift_p50": 0.015625,
+   "fork_position_p50": 65,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p007",
+     "position": 65,
+     "token_a": "\u0120long",
+     "token_b": "\u0120global",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p026",
+     "position": 37,
+     "token_a": "Result",
+     "token_b": "\u0120=",
+     "margin_a": 0.0078125,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p035",
+     "position": 80,
+     "token_a": "\u0120now",
+     "token_b": "\u0120use",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p039",
+     "position": 78,
+     "token_a": "\u0120generates",
+     "token_b": "\u0120translates",
+     "margin_a": 0.0,
+     "shift": 0.03125
+    },
+    {
+     "prompt_id": "p043",
+     "position": 60,
+     "token_a": "\u0120This",
+     "token_b": "\u0120We",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p045",
+     "position": 63,
+     "token_a": ".",
+     "token_b": "\u0120or",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p049",
+     "position": 84,
+     "token_a": "\u0120the",
+     "token_b": "\u0120how",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p053",
+     "position": 67,
+     "token_a": "\u0120from",
+     "token_b": ".\u010a",
+     "margin_a": 0.015625,
+     "shift": 0.03125
+    },
+    {
+     "prompt_id": "p055",
+     "position": 38,
+     "token_a": "\u0120and",
+     "token_b": "\u0120results",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p058",
+     "position": 83,
+     "token_a": "\u0120filter",
+     "token_b": "\u0120Bloom",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    }
+   ]
+  }
+ }
+}

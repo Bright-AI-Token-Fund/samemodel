@@ -36,6 +36,11 @@ REFERENCES = [
 ]
 
 
+def coarse_grid(resolution: Optional[float]) -> bool:
+    """Is the log-probability grid too coarse to tell rounding noise from more?"""
+    return resolution is not None and resolution > NOISE_MAX_P50
+
+
 def classify(prompts: int, identical_outputs: int, with_logprobs: bool, bitwise_like: bool,
              agreement: Optional[float], d50: Optional[float], d99: Optional[float],
              resolution: Optional[float]) -> str:
@@ -45,8 +50,7 @@ def classify(prompts: int, identical_outputs: int, with_logprobs: bool, bitwise_
         return "identical" if identical_outputs == prompts else "differs-unsized"
     if bitwise_like:
         return "identical"
-    coarse = resolution is not None and resolution > NOISE_MAX_P50
-    if d50 is None or d99 is None or coarse:
+    if d50 is None or d99 is None or coarse_grid(resolution):
         agreement = agreement if agreement is not None else 0.0
         if agreement >= NOISE_MIN_AGREEMENT:
             return "noise"
@@ -82,7 +86,7 @@ def scale(drift_p50: Optional[float]) -> Optional[str]:
     ratio = drift_p50 / ref
     if 0.8 <= ratio <= 1.25:
         return f"about the size of {label}"
-    return f"about {ratio:.1f}x {label}"
+    return f"about {ratio:.1f} times the size of {label}"
 
 
 def _log_ratio(a: float, b: float) -> float:
@@ -120,18 +124,23 @@ def explain(name: str, c: Comparison) -> List[str]:
                      f"{_pct(s['argmax_agreement']).strip()} of the time; the top-2 log-odds "
                      f"move by {_num(s['drift_p50']).strip()} nat at the median and "
                      f"{_num(s['drift_p99']).strip()} nat at the 99th percentile.")
-        if not s["drift_p50"] and s["drift_p99"]:
+        coarse = coarse_grid(c.resolution)
+        if not s["drift_p50"] and s["drift_p99"] and not c.resolution:
             lines.append("  Most positions match exactly; the difference is concentrated in a few.")
         size = scale(s["drift_p50"])
-        if size:
+        if size and not coarse:
             lines.append(f"  For scale: {size}.")
         if v == "noise":
             lines.append("  Outputs change only where two tokens were nearly tied.")
         if v == "different":
             lines.append("  If these were meant to be the same model and configuration, look closer.")
     if c.resolution and v != "identical":
-        lines.append(f"  Note: this endpoint reports log-probabilities on a {c.resolution:g}-nat "
-                     "grid, so drift below that reads as 0. Read the argmax agreement as well.")
+        note = (f"  Note: this endpoint reports log-probabilities on a {c.resolution:g}-nat grid. "
+                "Drift below that reads as 0")
+        if coarse_grid(c.resolution):
+            note += (" and the drift figures are multiples of it, so the verdict is based on the "
+                     "argmax agreement")
+        lines.append(note + ".")
     wrapped: List[str] = []
     for line in lines:
         indent = "  " if line.startswith("  ") else ""

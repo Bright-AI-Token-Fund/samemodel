@@ -10,11 +10,29 @@ needs no GPU of its own.
 
 ```text
 $ samemodel selfcheck --base-url http://localhost:8080
+samemodel selfcheck  http://localhost:8080  model=qwen2.5-0.5b-instruct-q4_k_m.gguf  24 prompts x 128 tokens  (unique conversations)
 
-check             same   argmax  drift50  drift99     KL99  forks  verdict
-<!-- EXAMPLE_TABLE -->
+check                        same   argmax  drift50  drift99     KL99  forks  verdict
+cache reuse                 1/12    97.87%   0.0888   0.4696   0.0116     11  drift
+first request under load    1/12    97.86%   0.0752   0.3142   0.0073     11  drift
+repeat under load           6/24    98.52%   0.0694   0.3689   0.0088     18  drift
 
-<!-- EXAMPLE_TEXT -->
+cache reuse: DRIFT. 11 of 12 outputs changed; on 517 positions with an identical context the
+  argmax agrees 97.87% of the time; the top-2 log-odds move by 0.0888 nat at the median and
+  0.4696 nat at the 99th percentile.
+  For scale: about 1.4 times the size of switching the weights from fp16 to Q8_0.
+first request under load: DRIFT. 11 of 12 outputs changed; on 515 positions with an
+  identical context the argmax agrees 97.86% of the time; the top-2 log-odds move by 0.0752
+  nat at the median and 0.3142 nat at the 99th percentile.
+  For scale: about the size of switching the weights from fp16 to Q8_0.
+repeat under load: DRIFT. 18 of 24 outputs changed; on 1214 positions with an identical
+  context the argmax agrees 98.52% of the time; the top-2 log-odds move by 0.0694 nat at the
+  median and 0.3689 nat at the 99th percentile.
+  For scale: about the size of switching the weights from fp16 to Q8_0.
+
+Prompt tokens served from cache, as the endpoint reports it: 6% first request, 98% repeat.
+Every conversation here starts differently. Run again with --shared-system to test requests
+that share a system prompt, as most deployments do.
 ```
 
 That is llama.cpp serving a Q4_K_M file on an Apple M4 CPU, at temperature 0. Same
@@ -38,21 +56,38 @@ well. Python 3.10 or newer.
 
 ## Check your own server
 
-Point it at the endpoint. It sends 20 short prompts three times each, greedy, 128
+Point it at the endpoint. It sends 24 short prompts three times each, greedy, 128
 tokens, and takes a minute or two on a small model.
 
 ```bash
-samemodel selfcheck --base-url http://localhost:8080             # llama-server, vLLM, SGLang, mlx_lm.server ...
+samemodel selfcheck --base-url http://localhost:8080             # llama-server, mlx_lm.server, vLLM, SGLang ...
+samemodel selfcheck --base-url http://localhost:8080 --shared-system
 samemodel selfcheck --base-url https://host/v1 --api-key $KEY --model my-model -n 60
 ```
 
-For each prompt it compares three requests:
+Every prompt is sent three times: for the first time, again on its own, and again
+at the same moment as three unrelated requests. A caching server can compute a
+conversation for the first time only once, so every second prompt makes its first
+request under load. That gives three comparisons:
 
-| request | what it is | compared with |
+| check | compares | tells you |
 | --- | --- | --- |
-| scratch | the first time the server sees this conversation | |
-| cached | the identical request again, so the server can reuse its prompt cache | scratch, as **cache reuse** |
-| busy | again, sent at the same moment as three unrelated requests | cached, as **co-batched** |
+| `cache reuse` | first request (alone) with the repeat | whether an answer computed from the prompt cache equals one computed from scratch |
+| `first request under load` | first request (with company) with the repeat | the same, when the first computation shared the server with other requests; read it against the row above |
+| `repeat under load` | the repeat with a third request sent in company | whether concurrent requests change an answer that is otherwise fully cached |
+
+By default every conversation starts with a different system message, so a first
+request has nothing to reuse. `--shared-system` gives all of them the same system
+message instead, as most deployments do, and a first request then already reuses
+the cached system prefix. The two modes answer different questions and can read
+very differently: in our benchmark of the setup above, 22 of 30 answers change
+between a first request and its repeat when conversations are unique, and 2 of 30
+when they share a system prompt.
+
+Requests carry no `seed`. Greedy decoding does not need one, and a seed can change
+how a server schedules a request: `mlx_lm.server` does not batch requests that
+have one, so its answers under load are exact with a seed and not without. If your
+clients send a seed, pass `--seed N` to measure what they get.
 
 The endpoint has to return `logprobs` with `top_logprobs` on
 `/v1/chat/completions`. Without them the tool still compares the text and says that
@@ -90,17 +125,49 @@ status, and `--json out.json` writes every number.
 
 ## What we measured
 
-<!-- MEASURED -->
+One small model (Qwen2.5-0.5B-Instruct), llama.cpp b12244 and mlx-lm 0.32.2, each
+weight file on a freshly started server:
+
+| setup | weights | reusing the prompt cache | sharing the server with other requests |
+| --- | --- | --- | --- |
+| llama.cpp, M4 CPU | fp16 | noise: 5 of 30 answers changed, drift 0.0014 | noise: 3 of 60 answers changed, drift 0.0014 |
+| llama.cpp, M4 CPU | q8_0 | identical | identical |
+| llama.cpp, M4 CPU | q4_k_m | drift: 22 of 30 answers changed, drift 0.0838 | drift: 43 of 60 answers changed, drift 0.0658 |
+| llama.cpp, M4 Metal | fp16 | noise: 1 of 30 answers changed, drift 0.0016 | noise: 3 of 60 answers changed, drift 0.0013 |
+| llama.cpp, M4 Metal | q8_0 | noise: 1 of 30 answers changed, drift 0.0016 | noise: 4 of 60 answers changed, drift 0.0014 |
+| llama.cpp, M4 Metal | q4_k_m | noise: 4 of 30 answers changed, drift 0.0026 | drift: 24 of 60 answers changed, drift 0.0146 |
+| llama.cpp, Xeon CPU | fp16 | identical | identical |
+| llama.cpp, Xeon CPU | q8_0 | identical | identical |
+| llama.cpp, Xeon CPU | q4_k_m | identical | identical |
+| MLX, M4 | bf16 | identical | drift: 45 of 60 answers changed, argmax 98.79% |
+| MLX, M4 | 8bit | identical | noise: 8 of 60 answers changed, argmax 99.87% |
+| MLX, M4 | 4bit | identical | noise: 10 of 60 answers changed, argmax 99.85% |
+
+Drift is the median shift of the top-2 log-odds in nats, on 60 prompts, with every
+conversation starting differently. MLX reports log-probabilities on a coarse grid,
+so its rows show the argmax agreement instead. For scale, changing the weights on
+the same machines:
+
+| change of weights | median drift | argmax agreement |
+| --- | --- | --- |
+| fp16 replaced by Q8_0 (llama.cpp) | 0.05 to 0.08 | 98.1 to 98.8% |
+| Q8_0 replaced by Q4_K_M (llama.cpp) | 0.32 to 0.35 | 93.1 to 93.9% |
+| bf16 replaced by 8bit (MLX) | 0.08 | 98.6% |
 
 Full method, hardware, versions, commands and raw data are in
 [`benchmarks/`](benchmarks/README.md). The short version of what the numbers say:
 
-- **Repeating the same request under the same conditions is always identical.**
-  Every difference comes from a changed computation path, never from randomness.
+- **A server that takes the same path twice gives the same answer twice.** Every
+  difference we saw comes from a changed computation path, never from randomness.
 - **Whether a path change matters depends on the combination** of quantisation,
-  backend and CPU architecture, not on any one of them.
+  backend and CPU architecture, not on any one of them. The same Q4_K_M file drifts
+  on the M4 CPU, far less on Metal, and not at all on the Xeon.
 - **Where it matters, it can be as large as a quantisation step.** The engine did
   not get a different model file; it computed the same file differently.
+- **A request field can decide the path.** `mlx_lm.server` batches only requests
+  without a seed. Batched, its `bf16` build moves about as far as a swap to `8bit`
+  weights would; with a seed nothing moves at all. The first version of this tool
+  sent a seed and reported MLX as identical.
 
 ## Reading the output
 
@@ -116,8 +183,8 @@ Full method, hardware, versions, commands and raw data are in
 | --- | --- |
 | `identical` | same tokens and same log-probabilities everywhere |
 | `noise` | rounding-level differences; outputs change only where two tokens were nearly tied |
-| `drift` | a measurable shift of the distribution, up to roughly a small quantisation step |
-| `different` | a large shift, or a small median with a heavy tail: not the same model in practice |
+| `drift` | a measurable shift of the distribution, up to roughly a small quantisation step; also a run that is mostly exact with a few positions well off |
+| `different` | a larger shift: not the same model in practice |
 
 The verdict is a reading aid. Its thresholds come from one set of measurements on
 one small model, and the raw numbers are always printed next to it. The "for scale"
@@ -125,7 +192,7 @@ line compares the drift with reference points from the same measurements:
 
 | reference point | median drift |
 | --- | --- |
-| fp16 weights, different batch shape | 0.0015 nat |
+| fp16 weights on another serving path | 0.0015 nat |
 | fp16 weights replaced by Q8_0 | 0.05 to 0.08 nat |
 | Q8_0 weights replaced by Q4_K_M | 0.32 to 0.35 nat |
 
@@ -138,9 +205,9 @@ contexts differ, and anything measured there mixes the endpoints' difference wit
 ordinary sensitivity to different input, so those positions are ignored.
 
 This matters because the obvious metric saturates. "How many answers changed"
-already reads 85% for a perturbation the size of fp16 to Q8_0 and 100% for one a few
-times larger, since a single flipped near-tie changes everything after it. Counting
-per position on identical contexts keeps the scale.
+already reads 75 to 90% for a perturbation the size of fp16 to Q8_0 and 100% for one
+a few times larger, since a single flipped near-tie changes everything after it.
+Counting per position on identical contexts keeps the scale.
 
 Drift is measured on log-odds rather than on agreement because agreement also
 depends on the model: the same perturbation flips more tokens when the model's
@@ -151,10 +218,20 @@ distributions are flat.
 - It measures; it does not say whether a difference is a bug, and it does not find
   root causes.
 - It sees what the endpoint reports. Engines that compute logits in half precision
-  report log-probabilities on a coarse grid (MLX: 1/128 to 1/16 nat), and drift below
-  that reads as zero. The tool detects this and says so.
-- Co-batching is best effort: the companions are sent at the same moment, but only
-  the server decides what shares a batch.
+  report log-probabilities on a grid (MLX: 1/128 to 1/16 nat), and drift below that
+  reads as zero. The tool detects this, says so, and falls back to the argmax
+  agreement for its verdict when the grid is too coarse.
+- Load is best effort: the companion requests are sent at the same moment, but only
+  the server decides what shares a batch, and it may treat requests differently
+  depending on their fields (see the note on `seed` above).
+- One live server cannot compute the same conversation from scratch twice, so "first
+  request alone" and "first request under load" are measured on different halves of
+  the prompts. A repeat also inherits whatever state the first request left in the
+  cache, so an effect that is baked into the cached state cancels out. For a
+  like-for-like comparison, record both sides on freshly started servers with
+  `record --tag` and `record --tag --companions 3`, then `diff` them.
+- Every run marks its conversations with a fresh random id, so two runs of the same
+  check give slightly different numbers.
 - The reference points and thresholds come from a 0.5B model. Expect the same
   ordering on larger models, not the same decimals.
 - Chat completions only, no streaming, no tool calls.
@@ -174,6 +251,12 @@ deployment.
   greedy divergence under speculative decoding, cache reuse and batch size, and
   [#31504](https://github.com/ggml-org/llama.cpp/pull/31504) works on the x86 CPU
   kernels.
+
+Not to be confused with [SameModel](https://github.com/AkritiKeswani/samemodel), an
+unrelated project that compares the providers of one model on OpenRouter for
+tool-calling and formatting failures. That one asks what a provider does to a
+request and its response; this one measures the numerical distance between two
+servings of the same weights.
 
 ## License
 

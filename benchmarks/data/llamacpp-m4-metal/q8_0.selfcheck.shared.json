@@ -1,0 +1,139 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18431",
+ "model": "qwen2.5-0.5b-instruct-q8_0",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": true,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 29,
+   "positions": 3507,
+   "argmax_agreement": 0.9997148560022812,
+   "max_logprob_diff": 0.0787045955657959,
+   "kl_p50": 1.3710870153341848e-07,
+   "kl_p99": 6.2632570232255355e-06,
+   "drift_p50": 0.0015373677015304565,
+   "drift_p99": 0.011121393064968288,
+   "forks": 1,
+   "fork_shift_p50": 0.001445770263671875,
+   "fork_position_p50": 69,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.975767366720517,
+   "scratch_hit_ratio": 0.35904684975767365,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p050",
+     "position": 69,
+     "token_a": " actions",
+     "token_b": " recommendations",
+     "margin_a": 0.00055694580078125,
+     "shift": 0.001445770263671875
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 28,
+   "positions": 3167,
+   "argmax_agreement": 0.9993684875276286,
+   "max_logprob_diff": 0.03274822235107422,
+   "kl_p50": 1.680965114022626e-07,
+   "kl_p99": 4.899419006600614e-06,
+   "drift_p50": 0.0013751685619354248,
+   "drift_p99": 0.008938028011471033,
+   "forks": 2,
+   "fork_shift_p50": 0.001361846923828125,
+   "fork_position_p50": 20,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p019",
+     "position": 38,
+     "token_a": ",",
+     "token_b": " allocation",
+     "margin_a": 0.000640869140625,
+     "shift": 0.001361846923828125
+    },
+    {
+     "prompt_id": "p055",
+     "position": 20,
+     "token_a": " order",
+     "token_b": " way",
+     "margin_a": 0.0001163482666015625,
+     "shift": 0.0021820068359375
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 55,
+   "positions": 6512,
+   "argmax_agreement": 0.9992321867321867,
+   "max_logprob_diff": 0.10528707504272461,
+   "kl_p50": 1.4757837666644255e-07,
+   "kl_p99": 5.861546534012102e-06,
+   "drift_p50": 0.001480221762903966,
+   "drift_p99": 0.010509612038731575,
+   "forks": 5,
+   "fork_shift_p50": 0.0021820068359375,
+   "fork_position_p50": 41,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p011",
+     "position": 51,
+     "token_a": " commonly",
+     "token_b": " specifically",
+     "margin_a": 0.0012971162796020508,
+     "shift": 0.0022240877151489258
+    },
+    {
+     "prompt_id": "p012",
+     "position": 41,
+     "token_a": " limit",
+     "token_b": " theorem",
+     "margin_a": 0.001888275146484375,
+     "shift": 0.0026645660400390625
+    },
+    {
+     "prompt_id": "p019",
+     "position": 38,
+     "token_a": " allocation",
+     "token_b": ",",
+     "margin_a": 0.000720977783203125,
+     "shift": 0.0014535188674926758
+    },
+    {
+     "prompt_id": "p050",
+     "position": 69,
+     "token_a": " recommendations",
+     "token_b": " actions",
+     "margin_a": 0.000888824462890625,
+     "shift": 0.001720428466796875
+    },
+    {
+     "prompt_id": "p055",
+     "position": 20,
+     "token_a": " way",
+     "token_b": " order",
+     "margin_a": 0.0020656585693359375,
+     "shift": 0.0021820068359375
+    }
+   ]
+  }
+ }
+}

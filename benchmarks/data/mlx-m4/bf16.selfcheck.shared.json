@@ -1,0 +1,586 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18432",
+ "model": "mlx-community/Qwen2.5-0.5B-Instruct-bf16",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": true,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3594,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": 0.0625,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9758842443729904,
+   "scratch_hit_ratio": 0.362540192926045,
+   "verdict": "identical",
+   "forks_detail": []
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 9,
+   "positions": 1711,
+   "argmax_agreement": 0.9877264757451782,
+   "max_logprob_diff": 0.5,
+   "kl_p50": 0.0003695632746570344,
+   "kl_p99": 0.005341338269178867,
+   "drift_p50": 0.0625,
+   "drift_p99": 0.25,
+   "forks": 21,
+   "fork_shift_p50": 0.125,
+   "fork_position_p50": 37,
+   "logprob_resolution": 0.0625,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p001",
+     "position": 49,
+     "token_a": "\u0120this",
+     "token_b": "\u0120chaining",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p005",
+     "position": 87,
+     "token_a": "\u0120S",
+     "token_b": "\u0120Cook",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p017",
+     "position": 34,
+     "token_a": "\u0120along",
+     "token_b": ".",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p019",
+     "position": 121,
+     "token_a": "\u0120updating",
+     "token_b": "\u0120modifying",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p021",
+     "position": 34,
+     "token_a": "\u0120goes",
+     "token_b": "\u0120takes",
+     "margin_a": 0.25,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p023",
+     "position": 41,
+     "token_a": "\u0120output",
+     "token_b": "\u0120embeddings",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p027",
+     "position": 112,
+     "token_a": "\u0120task",
+     "token_b": "\u0120problem",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p029",
+     "position": 15,
+     "token_a": "\u0120for",
+     "token_b": "\u0120each",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p031",
+     "position": 75,
+     "token_a": "\u0120it",
+     "token_b": "\u0120the",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p033",
+     "position": 46,
+     "token_a": "\u0120operations",
+     "token_b": "\u0120processes",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p035",
+     "position": 8,
+     "token_a": "\u0120typically",
+     "token_b": "\u0120occur",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p037",
+     "position": 41,
+     "token_a": "\u0120regular",
+     "token_b": "\u0120format",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p039",
+     "position": 44,
+     "token_a": ",",
+     "token_b": ".",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p041",
+     "position": 36,
+     "token_a": "\u0120sight",
+     "token_b": "\u0120masterpiece",
+     "margin_a": 0.0,
+     "shift": 0.0625
+    },
+    {
+     "prompt_id": "p043",
+     "position": 55,
+     "token_a": "\u0120Determine",
+     "token_b": "\u0120Backup",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p045",
+     "position": 25,
+     "token_a": "\u0120or",
+     "token_b": "\u0120than",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p047",
+     "position": 26,
+     "token_a": "\u0120the",
+     "token_b": "\u0120a",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p049",
+     "position": 31,
+     "token_a": "\u0120the",
+     "token_b": "\u0120that",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p051",
+     "position": 10,
+     "token_a": "\u0120model",
+     "token_b": "\u0120architecture",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p057",
+     "position": 18,
+     "token_a": "\u0120disk",
+     "token_b": "\u0120time",
+     "margin_a": 0.25,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p059",
+     "position": 37,
+     "token_a": "\u0120and",
+     "token_b": ",",
+     "margin_a": 0.0625,
+     "shift": 0.0625
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 17,
+   "positions": 3702,
+   "argmax_agreement": 0.9883846569421935,
+   "max_logprob_diff": 0.625,
+   "kl_p50": 0.00018621325669802272,
+   "kl_p99": 0.005380751381372654,
+   "drift_p50": 0.0625,
+   "drift_p99": 0.25,
+   "forks": 43,
+   "fork_shift_p50": 0.125,
+   "fork_position_p50": 31,
+   "logprob_resolution": 0.0625,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p001",
+     "position": 32,
+     "token_a": "\u0120un",
+     "token_b": "\u0120slow",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p003",
+     "position": 19,
+     "token_a": "\u0120decline",
+     "token_b": "\u0120expansion",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p004",
+     "position": 101,
+     "token_a": "\u0120mechanisms",
+     "token_b": "\u0120channels",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p005",
+     "position": 87,
+     "token_a": "\u0120Cook",
+     "token_b": "\u0120S",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p006",
+     "position": 27,
+     "token_a": "\u0120provides",
+     "token_b": "\u0120represents",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p007",
+     "position": 22,
+     "token_a": "\u0120modular",
+     "token_b": "\u0120code",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p010",
+     "position": 115,
+     "token_a": "\u0120clause",
+     "token_b": "\u0120part",
+     "margin_a": 0.25,
+     "shift": 0.375
+    },
+    {
+     "prompt_id": "p012",
+     "position": 27,
+     "token_a": "\u0120achieve",
+     "token_b": "\u0120satisfy",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p013",
+     "position": 31,
+     "token_a": "\u0120heute",
+     "token_b": "\u0120gut",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p016",
+     "position": 47,
+     "token_a": "\u0120search",
+     "token_b": "\u0120look",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p017",
+     "position": 20,
+     "token_a": "\u0120the",
+     "token_b": "\u0120st",
+     "margin_a": 0.25,
+     "shift": 0.375
+    },
+    {
+     "prompt_id": "p019",
+     "position": 121,
+     "token_a": "\u0120modifying",
+     "token_b": "\u0120updating",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p020",
+     "position": 19,
+     "token_a": "\u0120using",
+     "token_b": ":\u010a\u010a",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p021",
+     "position": 34,
+     "token_a": "\u0120takes",
+     "token_b": "\u0120goes",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p022",
+     "position": 35,
+     "token_a": "\u0120respond",
+     "token_b": "\u0120process",
+     "margin_a": 0.125,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p023",
+     "position": 39,
+     "token_a": ",",
+     "token_b": "\u0120and",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p024",
+     "position": 4,
+     "token_a": "\u0120code",
+     "token_b": "\u0120is",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p025",
+     "position": 6,
+     "token_a": "\u0120a",
+     "token_b": "\u0120plaintext",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p026",
+     "position": 66,
+     "token_a": "\u0120debounce",
+     "token_b": "\u0120deb",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p028",
+     "position": 8,
+     "token_a": "\u0120network",
+     "token_b": "\u0120hierarchical",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p030",
+     "position": 38,
+     "token_a": "\u0120and",
+     "token_b": "\u0120each",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p031",
+     "position": 75,
+     "token_a": "\u0120the",
+     "token_b": "\u0120it",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p032",
+     "position": 2,
+     "token_a": "\u0120convenience",
+     "token_b": "\u0120ultimate",
+     "margin_a": 0.0625,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p033",
+     "position": 46,
+     "token_a": "\u0120processes",
+     "token_b": "\u0120operations",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p034",
+     "position": 36,
+     "token_a": "'s",
+     "token_b": "\u0120logs",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p035",
+     "position": 57,
+     "token_a": "\u0120available",
+     "token_b": "\u0120accessible",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p036",
+     "position": 96,
+     "token_a": "\u0120floating",
+     "token_b": "\u0120value",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p037",
+     "position": 41,
+     "token_a": "\u0120format",
+     "token_b": "\u0120regular",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p038",
+     "position": 78,
+     "token_a": "\u0120variety",
+     "token_b": "\u0120wide",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p039",
+     "position": 21,
+     "token_a": "\u0120",
+     "token_b": "1",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p040",
+     "position": 113,
+     "token_a": "\u0120ensures",
+     "token_b": "\u0120allows",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p041",
+     "position": 17,
+     "token_a": "\u0120a",
+     "token_b": "\u0120so",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p042",
+     "position": 69,
+     "token_a": "\u0120produces",
+     "token_b": "\u0120recognizes",
+     "margin_a": 0.0,
+     "shift": 0.25
+    },
+    {
+     "prompt_id": "p043",
+     "position": 76,
+     "token_a": "\u0120in",
+     "token_b": "\u0120during",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p046",
+     "position": 12,
+     "token_a": "\u0120elements",
+     "token_b": "\u0120a",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p049",
+     "position": 31,
+     "token_a": "\u0120that",
+     "token_b": "\u0120the",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p051",
+     "position": 10,
+     "token_a": "\u0120architecture",
+     "token_b": "\u0120model",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p052",
+     "position": 7,
+     "token_a": "\u0120by",
+     "token_b": "\u0120automatically",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p054",
+     "position": 14,
+     "token_a": "\u0120two",
+     "token_b": "\u0120both",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p055",
+     "position": 14,
+     "token_a": "\u0120access",
+     "token_b": "\u0120are",
+     "margin_a": 0.125,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p057",
+     "position": 18,
+     "token_a": "\u0120time",
+     "token_b": "\u0120disk",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p058",
+     "position": 15,
+     "token_a": "\u0120checking",
+     "token_b": "\u0120verification",
+     "margin_a": 0.0,
+     "shift": 0.125
+    },
+    {
+     "prompt_id": "p059",
+     "position": 13,
+     "token_a": "1",
+     "token_b": "\u0120",
+     "margin_a": 0.0,
+     "shift": 0.125
+    }
+   ]
+  }
+ }
+}

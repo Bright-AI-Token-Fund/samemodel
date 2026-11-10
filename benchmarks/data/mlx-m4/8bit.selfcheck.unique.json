@@ -1,0 +1,170 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18432",
+ "model": "mlx-community/Qwen2.5-0.5B-Instruct-8bit",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 30,
+   "positions": 3592,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9785867237687366,
+   "scratch_hit_ratio": 0.0728051391862955,
+   "verdict": "identical",
+   "forks_detail": []
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 26,
+   "positions": 3108,
+   "argmax_agreement": 0.9987129987129987,
+   "max_logprob_diff": 0.0625,
+   "kl_p50": 5.1306035140686456e-06,
+   "kl_p99": 8.46430900732732e-05,
+   "drift_p50": 0.0078125,
+   "drift_p99": 0.03125,
+   "forks": 4,
+   "fork_shift_p50": 0.015625,
+   "fork_position_p50": 72,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p001",
+     "position": 72,
+     "token_a": "-value",
+     "token_b": ".",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p007",
+     "position": 38,
+     "token_a": "\u0120Use",
+     "token_b": "\u0120Write",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p017",
+     "position": 12,
+     "token_a": ".",
+     "token_b": "\u0120by",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p023",
+     "position": 118,
+     "token_a": "\u0120gradients",
+     "token_b": "\u0120loss",
+     "margin_a": 0.015625,
+     "shift": 0.03125
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 52,
+   "positions": 6277,
+   "argmax_agreement": 0.9987255058148797,
+   "max_logprob_diff": 0.109375,
+   "kl_p50": 3.60456011217396e-06,
+   "kl_p99": 8.425738106824981e-05,
+   "drift_p50": 0.0,
+   "drift_p99": 0.03125,
+   "forks": 8,
+   "fork_shift_p50": 0.015625,
+   "fork_position_p50": 47,
+   "logprob_resolution": 0.0078125,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "noise",
+   "forks_detail": [
+    {
+     "prompt_id": "p017",
+     "position": 66,
+     "token_a": "\u0120its",
+     "token_b": "\u0120the",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p024",
+     "position": 31,
+     "token_a": "\u0120",
+     "token_b": "1",
+     "margin_a": 0.015625,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p027",
+     "position": 47,
+     "token_a": "\u0120(",
+     "token_b": "\u0120predictions",
+     "margin_a": 0.015625,
+     "shift": 0.03125
+    },
+    {
+     "prompt_id": "p034",
+     "position": 85,
+     "token_a": "\u0120and",
+     "token_b": ".\u010a",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p038",
+     "position": 104,
+     "token_a": "\u0120based",
+     "token_b": "\u0120built",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p048",
+     "position": 15,
+     "token_a": "\u0120The",
+     "token_b": "\u0120This",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p052",
+     "position": 42,
+     "token_a": ".",
+     "token_b": ".\u010a",
+     "margin_a": 0.0,
+     "shift": 0.015625
+    },
+    {
+     "prompt_id": "p054",
+     "position": 14,
+     "token_a": "\u0120two",
+     "token_b": "\u0120both",
+     "margin_a": 0.0,
+     "shift": 0.03125
+    }
+   ]
+  }
+ }
+}

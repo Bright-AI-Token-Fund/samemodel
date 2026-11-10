@@ -34,6 +34,9 @@ path = "src/samemodel/__init__.py"
 [tool.hatch.build.targets.wheel]
 packages = ["src/samemodel"]
 
+[tool.hatch.build.targets.sdist]
+exclude = ["benchmarks/data"]
+
 [tool.ruff]
 line-length = 110
 target-version = "py310"

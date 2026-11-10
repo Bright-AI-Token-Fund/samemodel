@@ -15,7 +15,7 @@ ruff check src tests
 ```
 
 The tests start the built-in mock endpoint on a free local port. They need no
-model, no GPU and no network access, and take about 20 seconds.
+model, no GPU and no network access, and take about half a minute.
 
 ## What makes a change easy to merge
 

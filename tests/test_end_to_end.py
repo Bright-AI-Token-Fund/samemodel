@@ -9,7 +9,7 @@ from samemodel.client import Client, EndpointError
 from samemodel.compare import percentile
 from samemodel.mock import MockServer
 from samemodel.prompts import PROMPTS
-from samemodel.report import verdict
+from samemodel.report import render, verdict
 
 FAST = {"window_ms": 40}
 
@@ -55,6 +55,10 @@ def test_tiny_drift_is_noise_and_large_drift_is_different():
 def test_coarse_grid_is_reported():
     rows = run_selfcheck(cache_drift=0.08, resolution=1 / 16)
     assert rows[checks.REUSE].resolution == 1 / 16
+    text = " ".join(render(rows).split())
+    assert "0.0625-nat grid" in text and "based on the argmax agreement" in text
+    # what the grid hides must not be described as an exact match or put on the scale
+    assert "match exactly" not in text and "For scale" not in text
 
 
 def test_endpoint_without_logprobs_falls_back_to_text():
