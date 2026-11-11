@@ -169,6 +169,24 @@ Full method, hardware, versions, commands and raw data are in
   weights would; with a seed nothing moves at all. The first version of this tool
   sent a seed and reported MLX as identical.
 
+### Why, for one of these rows
+
+The Q4_K_M row on the M4 CPU is traced to its causes in
+[`benchmarks/root-cause/`](benchmarks/root-cause/README.md):
+
+- **A batch of 32 or more tokens is computed by a different backend.** The macOS
+  build includes Accelerate, which multiplies the activations as floats. Below 32
+  rows the CPU kernel rounds them to 8 bits first. A prompt computed from scratch and
+  the same prompt continued from the cache land on different sides of that line.
+- **The single-row and the four-row Q6_K kernel for NEON round differently**, by
+  about 4e-7. The 8-bit rounding of activations in the layers that follow turns that
+  into steps a thousand times larger.
+
+With the BLAS backend off and two lines of one kernel changed, the same file on the
+same machine with the same batching is identical on all three checks. For a 1.5B
+model of the same family, where the first cause does not apply, the two lines alone
+are enough.
+
 ## Reading the output
 
 | column | meaning |
@@ -251,6 +269,12 @@ deployment.
   greedy divergence under speculative decoding, cache reuse and batch size, and
   [#31504](https://github.com/ggml-org/llama.cpp/pull/31504) works on the x86 CPU
   kernels.
+
+- [llamacpp-batch-invariance](https://github.com/addiplus/llamacpp-batch-invariance)
+  checks whether concurrent requests to a llama.cpp server score the same as the same
+  requests sent one at a time, and issues a pass or fail certificate per
+  configuration. samemodel reports a distance instead, and also covers cache reuse,
+  other engines and comparisons across builds.
 
 Not to be confused with [SameModel](https://github.com/AkritiKeswani/samemodel), an
 unrelated project that compares the providers of one model on OpenRouter for

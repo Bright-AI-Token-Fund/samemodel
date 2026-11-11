@@ -217,7 +217,10 @@ it carries a seed, by about as much as batching changes it.
    rounding noise.
 3. **The same Q4_K_M file is exact on the Xeon** and several times quieter on Metal.
    The effect belongs to a combination of quantisation, backend and architecture,
-   not to the quantisation format.
+   not to the quantisation format. For the M4 CPU, [`root-cause/`](root-cause/README.md)
+   traces it to two things: a BLAS backend that takes over once a batch has 32 rows,
+   and a pair of Q6_K kernels that round differently. With both removed the file is
+   identical there too.
 4. **Moving a quantised file to another backend or CPU architecture is itself a
    shift** of about a small quantisation step (0.06 to 0.09 nat), even between two
    setups that are each exact on their own. fp16 moves by rounding noise only.
@@ -235,7 +238,8 @@ it carries a seed, by about as much as batching changes it.
 
 - One small model, 60 prompts, one run per configuration. The ordering of effects is
   the finding; the decimals are not constants of nature.
-- No root-cause analysis. For llama.cpp's CPU kernels see
+- The cause is traced for one setup only, llama.cpp with Q4_K_M on the M4 CPU, in
+  [`root-cause/`](root-cause/README.md). For llama.cpp's CPU kernels in general see
   [#25618](https://github.com/ggml-org/llama.cpp/issues/25618) and
   [#31504](https://github.com/ggml-org/llama.cpp/pull/31504).
 - No CUDA backend, no vLLM, no SGLang yet.

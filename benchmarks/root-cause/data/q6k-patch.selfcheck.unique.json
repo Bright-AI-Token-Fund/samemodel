@@ -1,0 +1,314 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18461",
+ "model": "q4_k_m",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 9,
+   "positions": 1842,
+   "argmax_agreement": 0.988599348534202,
+   "max_logprob_diff": 1.288482666015625,
+   "kl_p50": 0.0005295205973952754,
+   "kl_p99": 0.009458675520489146,
+   "drift_p50": 0.07897317414244753,
+   "drift_p99": 0.4249686598777771,
+   "forks": 21,
+   "fork_shift_p50": 0.08082199096679688,
+   "fork_position_p50": 36,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9786400854396582,
+   "scratch_hit_ratio": 0.06372374510501957,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p000",
+     "position": 43,
+     "token_a": " using",
+     "token_b": "'s",
+     "margin_a": 0.0809326171875,
+     "shift": 0.1351414918899536
+    },
+    {
+     "prompt_id": "p002",
+     "position": 53,
+     "token_a": " that",
+     "token_b": " which",
+     "margin_a": 0.03222090005874634,
+     "shift": 0.22784048318862915
+    },
+    {
+     "prompt_id": "p010",
+     "position": 67,
+     "token_a": " latest",
+     "token_b": " `",
+     "margin_a": 0.05735206604003906,
+     "shift": 0.12623965740203857
+    },
+    {
+     "prompt_id": "p012",
+     "position": 36,
+     "token_a": " means",
+     "token_b": " refers",
+     "margin_a": 0.07262814044952393,
+     "shift": 0.08918583393096924
+    },
+    {
+     "prompt_id": "p014",
+     "position": 14,
+     "token_a": " difference",
+     "token_b": " from",
+     "margin_a": 0.0292319655418396,
+     "shift": 0.13905704021453857
+    },
+    {
+     "prompt_id": "p016",
+     "position": 1,
+     "token_a": " `",
+     "token_b": " command",
+     "margin_a": 0.22582054138183594,
+     "shift": 0.26804929971694946
+    },
+    {
+     "prompt_id": "p018",
+     "position": 29,
+     "token_a": " use",
+     "token_b": " understand",
+     "margin_a": 0.018005430698394775,
+     "shift": 0.026586592197418213
+    },
+    {
+     "prompt_id": "p020",
+     "position": 14,
+     "token_a": ",",
+     "token_b": " using",
+     "margin_a": 0.0411185622215271,
+     "shift": 0.07716166973114014
+    },
+    {
+     "prompt_id": "p022",
+     "position": 63,
+     "token_a": " large",
+     "token_b": " high",
+     "margin_a": 0.013275146484375,
+     "shift": 0.08082199096679688
+    },
+    {
+     "prompt_id": "p024",
+     "position": 30,
+     "token_a": "1",
+     "token_b": " ",
+     "margin_a": 0.05055999755859375,
+     "shift": 0.05238151550292969
+    },
+    {
+     "prompt_id": "p026",
+     "position": 52,
+     "token_a": " of",
+     "token_b": " is",
+     "margin_a": 0.027158737182617188,
+     "shift": 0.06134986877441406
+    },
+    {
+     "prompt_id": "p028",
+     "position": 76,
+     "token_a": " stores",
+     "token_b": " translates",
+     "margin_a": 0.1645430326461792,
+     "shift": 0.1845722198486328
+    },
+    {
+     "prompt_id": "p030",
+     "position": 105,
+     "token_a": " of",
+     "token_b": " you",
+     "margin_a": 0.22328758239746094,
+     "shift": 0.2639923095703125
+    },
+    {
+     "prompt_id": "p032",
+     "position": 9,
+     "token_a": " Made",
+     "token_b": " This",
+     "margin_a": 0.0036411285400390625,
+     "shift": 0.053356170654296875
+    },
+    {
+     "prompt_id": "p036",
+     "position": 59,
+     "token_a": " stored",
+     "token_b": " handled",
+     "margin_a": 0.027923583984375,
+     "shift": 0.05890452861785889
+    },
+    {
+     "prompt_id": "p040",
+     "position": 37,
+     "token_a": " not",
+     "token_b": " always",
+     "margin_a": 0.13582420349121094,
+     "shift": 0.14694976806640625
+    },
+    {
+     "prompt_id": "p044",
+     "position": 8,
+     "token_a": " data",
+     "token_b": " of",
+     "margin_a": 0.11822503805160522,
+     "shift": 0.271385133266449
+    },
+    {
+     "prompt_id": "p046",
+     "position": 23,
+     "token_a": " either",
+     "token_b": " typically",
+     "margin_a": 0.0034389495849609375,
+     "shift": 0.016862869262695312
+    },
+    {
+     "prompt_id": "p054",
+     "position": 19,
+     "token_a": " transmitting",
+     "token_b": " data",
+     "margin_a": 0.010990142822265625,
+     "shift": 0.06783294677734375
+    },
+    {
+     "prompt_id": "p056",
+     "position": 5,
+     "token_a": " simple",
+     "token_b": " Python",
+     "margin_a": 0.016300082206726074,
+     "shift": 0.0349578857421875
+    },
+    {
+     "prompt_id": "p058",
+     "position": 68,
+     "token_a": " If",
+     "token_b": " When",
+     "margin_a": 0.03250312805175781,
+     "shift": 0.035701632499694824
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 21,
+   "positions": 2584,
+   "argmax_agreement": 0.996517027863777,
+   "max_logprob_diff": 0.6391229629516602,
+   "kl_p50": 0.0,
+   "kl_p99": 0.005050074323377042,
+   "drift_p50": 0.0,
+   "drift_p99": 0.22616981714963913,
+   "forks": 9,
+   "fork_shift_p50": 0.14666748046875,
+   "fork_position_p50": 26,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p007",
+     "position": 8,
+     "token_a": ".",
+     "token_b": ".\n",
+     "margin_a": 0.05765724182128906,
+     "shift": 0.10054779052734375
+    },
+    {
+     "prompt_id": "p009",
+     "position": 33,
+     "token_a": " Ack",
+     "token_b": " and",
+     "margin_a": 0.11927604675292969,
+     "shift": 0.14666748046875
+    },
+    {
+     "prompt_id": "p017",
+     "position": 30,
+     "token_a": " Here",
+     "token_b": " The",
+     "margin_a": 0.0050067901611328125,
+     "shift": 0.10267841815948486
+    },
+    {
+     "prompt_id": "p023",
+     "position": 25,
+     "token_a": " inference",
+     "token_b": " training",
+     "margin_a": 0.10563671588897705,
+     "shift": 0.18542492389678955
+    },
+    {
+     "prompt_id": "p027",
+     "position": 8,
+     "token_a": " in",
+     "token_b": " to",
+     "margin_a": 0.19043344259262085,
+     "shift": 0.1923675537109375
+    },
+    {
+     "prompt_id": "p033",
+     "position": 21,
+     "token_a": " system",
+     "token_b": " program",
+     "margin_a": 0.0275307297706604,
+     "shift": 0.030668437480926514
+    },
+    {
+     "prompt_id": "p039",
+     "position": 32,
+     "token_a": " ",
+     "token_b": "1",
+     "margin_a": 0.023580551147460938,
+     "shift": 0.20737653970718384
+    },
+    {
+     "prompt_id": "p041",
+     "position": 26,
+     "token_a": " run",
+     "token_b": " easy",
+     "margin_a": 0.05290794372558594,
+     "shift": 0.12246894836425781
+    },
+    {
+     "prompt_id": "p049",
+     "position": 82,
+     "token_a": "0",
+     "token_b": ",",
+     "margin_a": 0.12013441324234009,
+     "shift": 0.14958012104034424
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 60,
+   "positions": 6885,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "identical",
+   "forks_detail": []
+  }
+ }
+}

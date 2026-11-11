@@ -1,0 +1,347 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18461",
+ "model": "q4_k_m",
+ "prompts": 24,
+ "max_tokens": 128,
+ "shared_system": false,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 12,
+   "identical_outputs": 11,
+   "positions": 1310,
+   "argmax_agreement": 0.999236641221374,
+   "max_logprob_diff": 0.8181209564208984,
+   "kl_p50": 0.0,
+   "kl_p99": 0.01452462917482218,
+   "drift_p50": 0.0,
+   "drift_p99": 0.4039383791387081,
+   "forks": 1,
+   "fork_shift_p50": 0.5151121020317078,
+   "fork_position_p50": 53,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.978965819456617,
+   "scratch_hit_ratio": 0.060473269062226116,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p020",
+     "position": 53,
+     "token_a": " is",
+     "token_b": " exists",
+     "margin_a": 0.12892353534698486,
+     "shift": 0.5151121020317078
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 12,
+   "identical_outputs": 1,
+   "positions": 491,
+   "argmax_agreement": 0.9775967413441955,
+   "max_logprob_diff": 0.8592910766601562,
+   "kl_p50": 0.0014342504902882603,
+   "kl_p99": 0.024304721887917605,
+   "drift_p50": 0.13829246163368225,
+   "drift_p99": 0.528316468000412,
+   "forks": 11,
+   "fork_shift_p50": 0.2993431091308594,
+   "fork_position_p50": 29,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p001",
+     "position": 12,
+     "token_a": ".",
+     "token_b": " using",
+     "margin_a": 0.2133007049560547,
+     "shift": 0.2993431091308594
+    },
+    {
+     "prompt_id": "p003",
+     "position": 29,
+     "token_a": " over",
+     "token_b": " seen",
+     "margin_a": 0.2907752990722656,
+     "shift": 0.44611358642578125
+    },
+    {
+     "prompt_id": "p005",
+     "position": 46,
+     "token_a": "/",
+     "token_b": " cup",
+     "margin_a": 0.11008644104003906,
+     "shift": 0.14521026611328125
+    },
+    {
+     "prompt_id": "p007",
+     "position": 63,
+     "token_a": " known",
+     "token_b": " understood",
+     "margin_a": 0.19844436645507812,
+     "shift": 0.3604888916015625
+    },
+    {
+     "prompt_id": "p009",
+     "position": 11,
+     "token_a": " three",
+     "token_b": " series",
+     "margin_a": 0.011455535888671875,
+     "shift": 0.11995697021484375
+    },
+    {
+     "prompt_id": "p011",
+     "position": 24,
+     "token_a": ".\n\n",
+     "token_b": " between",
+     "margin_a": 0.10654258728027344,
+     "shift": 0.19298171997070312
+    },
+    {
+     "prompt_id": "p013",
+     "position": 29,
+     "token_a": "Es",
+     "token_b": "Das",
+     "margin_a": 0.07345569133758545,
+     "shift": 0.18834292888641357
+    },
+    {
+     "prompt_id": "p015",
+     "position": 6,
+     "token_a": "Le",
+     "token_b": "F",
+     "margin_a": 0.38452351093292236,
+     "shift": 0.4111366271972656
+    },
+    {
+     "prompt_id": "p019",
+     "position": 43,
+     "token_a": " eventually",
+     "token_b": " runs",
+     "margin_a": 0.26410287618637085,
+     "shift": 0.40093994140625
+    },
+    {
+     "prompt_id": "p021",
+     "position": 72,
+     "token_a": " vapor",
+     "token_b": " steam",
+     "margin_a": 0.1680659055709839,
+     "shift": 0.27865588665008545
+    },
+    {
+     "prompt_id": "p023",
+     "position": 17,
+     "token_a": " key",
+     "token_b": " information",
+     "margin_a": 0.17917823791503906,
+     "shift": 0.6119403839111328
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 24,
+   "identical_outputs": 2,
+   "positions": 968,
+   "argmax_agreement": 0.9772727272727273,
+   "max_logprob_diff": 1.0861577987670898,
+   "kl_p50": 0.000673506990404136,
+   "kl_p99": 0.02621727902905199,
+   "drift_p50": 0.1327800154685974,
+   "drift_p99": 0.6070915750024142,
+   "forks": 22,
+   "fork_shift_p50": 0.2670915126800537,
+   "fork_position_p50": 24,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p000",
+     "position": 28,
+     "token_a": " the",
+     "token_b": " its",
+     "margin_a": 0.09342759847640991,
+     "shift": 0.10253137350082397
+    },
+    {
+     "prompt_id": "p001",
+     "position": 12,
+     "token_a": " using",
+     "token_b": ".",
+     "margin_a": 0.08604240417480469,
+     "shift": 0.4507293701171875
+    },
+    {
+     "prompt_id": "p002",
+     "position": 121,
+     "token_a": "input",
+     "token_b": "print",
+     "margin_a": 0.051616787910461426,
+     "shift": 0.7237893342971802
+    },
+    {
+     "prompt_id": "p003",
+     "position": 29,
+     "token_a": " seen",
+     "token_b": " over",
+     "margin_a": 0.15533828735351562,
+     "shift": 0.44611358642578125
+    },
+    {
+     "prompt_id": "p004",
+     "position": 14,
+     "token_a": " an",
+     "token_b": " the",
+     "margin_a": 0.04966926574707031,
+     "shift": 0.26431095600128174
+    },
+    {
+     "prompt_id": "p005",
+     "position": 46,
+     "token_a": " cup",
+     "token_b": "/",
+     "margin_a": 0.03512382507324219,
+     "shift": 0.14521026611328125
+    },
+    {
+     "prompt_id": "p006",
+     "position": 64,
+     "token_a": " acquired",
+     "token_b": " used",
+     "margin_a": 0.20241743326187134,
+     "shift": 0.29103100299835205
+    },
+    {
+     "prompt_id": "p007",
+     "position": 63,
+     "token_a": " understood",
+     "token_b": " known",
+     "margin_a": 0.16204452514648438,
+     "shift": 0.3604888916015625
+    },
+    {
+     "prompt_id": "p008",
+     "position": 5,
+     "token_a": " the",
+     "token_b": " shorter",
+     "margin_a": 0.27587318420410156,
+     "shift": 0.3597010374069214
+    },
+    {
+     "prompt_id": "p009",
+     "position": 11,
+     "token_a": " series",
+     "token_b": " three",
+     "margin_a": 0.10850143432617188,
+     "shift": 0.11995697021484375
+    },
+    {
+     "prompt_id": "p010",
+     "position": 26,
+     "token_a": "_date",
+     "token_b": "_id",
+     "margin_a": 0.1323147416114807,
+     "shift": 0.3510819673538208
+    },
+    {
+     "prompt_id": "p011",
+     "position": 24,
+     "token_a": " between",
+     "token_b": ".\n\n",
+     "margin_a": 0.08643913269042969,
+     "shift": 0.19298171997070312
+    },
+    {
+     "prompt_id": "p012",
+     "position": 20,
+     "token_a": " specific",
+     "token_b": " out",
+     "margin_a": 0.07839202880859375,
+     "shift": 0.7485160827636719
+    },
+    {
+     "prompt_id": "p014",
+     "position": 3,
+     "token_a": " duration",
+     "token_b": " length",
+     "margin_a": 0.21056747436523438,
+     "shift": 0.2283172607421875
+    },
+    {
+     "prompt_id": "p015",
+     "position": 6,
+     "token_a": "F",
+     "token_b": "Le",
+     "margin_a": 0.02661311626434326,
+     "shift": 0.4910314083099365
+    },
+    {
+     "prompt_id": "p016",
+     "position": 100,
+     "token_a": ".\n",
+     "token_b": ".",
+     "margin_a": 0.1909218430519104,
+     "shift": 0.22846418619155884
+    },
+    {
+     "prompt_id": "p018",
+     "position": 46,
+     "token_a": " Architecture",
+     "token_b": " Data",
+     "margin_a": 0.04174232482910156,
+     "shift": 0.2670915126800537
+    },
+    {
+     "prompt_id": "p019",
+     "position": 34,
+     "token_a": " program",
+     "token_b": " system",
+     "margin_a": 0.19398117065429688,
+     "shift": 0.22729873657226562
+    },
+    {
+     "prompt_id": "p020",
+     "position": 88,
+     "token_a": "\n\n",
+     "token_b": "\n",
+     "margin_a": 0.044315338134765625,
+     "shift": 0.11277192831039429
+    },
+    {
+     "prompt_id": "p021",
+     "position": 15,
+     "token_a": " world",
+     "token_b": " planet",
+     "margin_a": 0.1270732879638672,
+     "shift": 0.16698265075683594
+    },
+    {
+     "prompt_id": "p022",
+     "position": 0,
+     "token_a": "There",
+     "token_b": "High",
+     "margin_a": 0.09793853759765625,
+     "shift": 0.5311604738235474
+    },
+    {
+     "prompt_id": "p023",
+     "position": 17,
+     "token_a": " information",
+     "token_b": " key",
+     "margin_a": 0.43276214599609375,
+     "shift": 0.6119403839111328
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,102 @@
+neon=1 dotprod=1 matmul_int8=0 avx2=0 avx512=0  n_in=896 n_out=4864 threads=4 seed=1
+repacked kernel for this shape: q4_0 q8_0 iq4_nl
+no repacked kernel: q4_1 q5_0 q5_1 f16 bf16 f32
+every column of a batch is compared with the same vector multiplied alone
+
+type   buffer   rows  max |batch - alone|    columns that differ
+q4_K   skipped: n_in is not a multiple of its block size
+
+q5_K   skipped: n_in is not a multiple of its block size
+
+q6_K   skipped: n_in is not a multiple of its block size
+
+q4_0   repack      2  0.000e+00              0 of 2
+q4_0   repack      3  0.000e+00              0 of 3
+q4_0   repack      4  0.000e+00              0 of 4
+q4_0   repack      5  0.000e+00              0 of 5
+q4_0   repack      8  0.000e+00              0 of 8
+q4_0   repack      9  0.000e+00              0 of 9
+q4_0   repack     16  0.000e+00              0 of 16
+q4_0   repack     17  0.000e+00              0 of 17
+q4_0   repack     31  0.000e+00              0 of 31
+q4_0   repack     32  0.000e+00              0 of 32
+q4_0   repack     33  0.000e+00              0 of 33
+q4_0   repack     64  0.000e+00              0 of 64
+q4_0   repack     65  0.000e+00              0 of 65
+q4_0   repack     96  0.000e+00              0 of 96
+q4_0   plain       2  5.812e-07              2 of 2
+q4_0   plain       3  6.678e-07              3 of 3
+q4_0   plain       4  6.678e-07              4 of 4
+q4_0   plain       5  6.678e-07              5 of 5
+q4_0   plain       8  8.857e-07              8 of 8
+q4_0   plain       9  8.857e-07              9 of 9
+q4_0   plain      16  8.857e-07              16 of 16
+q4_0   plain      17  8.857e-07              17 of 17
+q4_0   plain      31  1.018e-06              31 of 31
+q4_0   plain      32  1.018e-06              32 of 32
+q4_0   plain      33  1.018e-06              33 of 33
+q4_0   plain      64  1.099e-06              64 of 64
+q4_0   plain      65  1.099e-06              65 of 65
+q4_0   plain      96  1.166e-06              96 of 96
+
+q5_0   repack      -  no repacked kernel for this type on this CPU
+q5_0   plain       2  0.000e+00              0 of 2
+q5_0   plain       3  0.000e+00              0 of 3
+q5_0   plain       4  0.000e+00              0 of 4
+q5_0   plain       5  0.000e+00              0 of 5
+q5_0   plain       8  0.000e+00              0 of 8
+q5_0   plain       9  0.000e+00              0 of 9
+q5_0   plain      16  0.000e+00              0 of 16
+q5_0   plain      17  0.000e+00              0 of 17
+q5_0   plain      31  0.000e+00              0 of 31
+q5_0   plain      32  0.000e+00              0 of 32
+q5_0   plain      33  0.000e+00              0 of 33
+q5_0   plain      64  0.000e+00              0 of 64
+q5_0   plain      65  0.000e+00              0 of 65
+q5_0   plain      96  0.000e+00              0 of 96
+
+q8_0   repack      2  0.000e+00              0 of 2
+q8_0   repack      3  0.000e+00              0 of 3
+q8_0   repack      4  0.000e+00              0 of 4
+q8_0   repack      5  0.000e+00              0 of 5
+q8_0   repack      8  0.000e+00              0 of 8
+q8_0   repack      9  0.000e+00              0 of 9
+q8_0   repack     16  0.000e+00              0 of 16
+q8_0   repack     17  0.000e+00              0 of 17
+q8_0   repack     31  0.000e+00              0 of 31
+q8_0   repack     32  0.000e+00              0 of 32
+q8_0   repack     33  0.000e+00              0 of 33
+q8_0   repack     64  0.000e+00              0 of 64
+q8_0   repack     65  0.000e+00              0 of 65
+q8_0   repack     96  0.000e+00              0 of 96
+q8_0   plain       2  6.653e-07              2 of 2
+q8_0   plain       3  6.668e-07              3 of 3
+q8_0   plain       4  6.668e-07              4 of 4
+q8_0   plain       5  6.668e-07              5 of 5
+q8_0   plain       8  7.405e-07              8 of 8
+q8_0   plain       9  7.405e-07              9 of 9
+q8_0   plain      16  7.481e-07              16 of 16
+q8_0   plain      17  7.481e-07              17 of 17
+q8_0   plain      31  9.585e-07              31 of 31
+q8_0   plain      32  9.585e-07              32 of 32
+q8_0   plain      33  9.585e-07              33 of 33
+q8_0   plain      64  1.191e-06              64 of 64
+q8_0   plain      65  1.191e-06              65 of 65
+q8_0   plain      96  1.191e-06              96 of 96
+
+f16    repack      -  no repacked kernel for this type on this CPU
+f16    plain       2  1.358e-06              2 of 2
+f16    plain       3  1.834e-06              3 of 3
+f16    plain       4  1.834e-06              4 of 4
+f16    plain       5  1.917e-06              5 of 5
+f16    plain       8  2.093e-06              8 of 8
+f16    plain       9  2.093e-06              9 of 9
+f16    plain      16  2.093e-06              16 of 16
+f16    plain      17  2.093e-06              17 of 17
+f16    plain      31  2.396e-06              31 of 31
+f16    plain      32  2.396e-06              32 of 32
+f16    plain      33  2.396e-06              33 of 33
+f16    plain      64  2.396e-06              64 of 64
+f16    plain      65  2.396e-06              65 of 65
+f16    plain      96  2.396e-06              96 of 96
+

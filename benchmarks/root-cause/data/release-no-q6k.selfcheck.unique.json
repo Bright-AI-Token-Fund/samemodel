@@ -1,0 +1,346 @@
+{
+ "tool": "samemodel",
+ "version": "0.1.0",
+ "endpoint": "http://127.0.0.1:18451",
+ "model": "q4_k_m",
+ "prompts": 60,
+ "max_tokens": 128,
+ "shared_system": false,
+ "seed": null,
+ "checks": {
+  "cache reuse": {
+   "prompts": 30,
+   "identical_outputs": 5,
+   "positions": 1447,
+   "argmax_agreement": 0.9827228749136143,
+   "max_logprob_diff": 0.8488445281982422,
+   "kl_p50": 0.0002745848091596837,
+   "kl_p99": 0.009070294884455316,
+   "drift_p50": 0.08824163035023957,
+   "drift_p99": 0.39576889424643014,
+   "forks": 25,
+   "fork_shift_p50": 0.17343509197235107,
+   "fork_position_p50": 24,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": 0.9785561115082202,
+   "scratch_hit_ratio": 0.06504646175839886,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p000",
+     "position": 58,
+     "token_a": " requested",
+     "token_b": " content",
+     "margin_a": 0.021503448486328125,
+     "shift": 0.15699005126953125
+    },
+    {
+     "prompt_id": "p006",
+     "position": 24,
+     "token_a": " lock",
+     "token_b": " mechanism",
+     "margin_a": 0.1519259214401245,
+     "shift": 0.17343509197235107
+    },
+    {
+     "prompt_id": "p008",
+     "position": 20,
+     "token_a": " light",
+     "token_b": " color",
+     "margin_a": 0.024156570434570312,
+     "shift": 0.029832839965820312
+    },
+    {
+     "prompt_id": "p010",
+     "position": 57,
+     "token_a": "1",
+     "token_b": "-",
+     "margin_a": 0.009813368320465088,
+     "shift": 0.0276528000831604
+    },
+    {
+     "prompt_id": "p012",
+     "position": 76,
+     "token_a": " Ca",
+     "token_b": " Con",
+     "margin_a": 0.08721351623535156,
+     "shift": 0.1628437042236328
+    },
+    {
+     "prompt_id": "p014",
+     "position": 13,
+     "token_a": " time",
+     "token_b": " difference",
+     "margin_a": 0.11978727579116821,
+     "shift": 0.23229026794433594
+    },
+    {
+     "prompt_id": "p016",
+     "position": 17,
+     "token_a": " file",
+     "token_b": " regular",
+     "margin_a": 0.009439349174499512,
+     "shift": 0.12369537353515625
+    },
+    {
+     "prompt_id": "p018",
+     "position": 61,
+     "token_a": " Communication",
+     "token_b": " Data",
+     "margin_a": 0.018541336059570312,
+     "shift": 0.22545075416564941
+    },
+    {
+     "prompt_id": "p020",
+     "position": 50,
+     "token_a": " loop",
+     "token_b": " script",
+     "margin_a": 0.00220489501953125,
+     "shift": 0.2047595977783203
+    },
+    {
+     "prompt_id": "p022",
+     "position": 62,
+     "token_a": " delivery",
+     "token_b": " processing",
+     "margin_a": 0.08866304159164429,
+     "shift": 0.272849977016449
+    },
+    {
+     "prompt_id": "p024",
+     "position": 39,
+     "token_a": " data",
+     "token_b": " code",
+     "margin_a": 0.17657470703125,
+     "shift": 0.20391857624053955
+    },
+    {
+     "prompt_id": "p026",
+     "position": 45,
+     "token_a": "   ",
+     "token_b": " ",
+     "margin_a": 0.0119209885597229,
+     "shift": 0.11562740802764893
+    },
+    {
+     "prompt_id": "p028",
+     "position": 11,
+     "token_a": " allows",
+     "token_b": " translates",
+     "margin_a": 0.1337031126022339,
+     "shift": 0.17624449729919434
+    },
+    {
+     "prompt_id": "p032",
+     "position": 0,
+     "token_a": "A",
+     "token_b": "The",
+     "margin_a": 0.14999687671661377,
+     "shift": 0.30165791511535645
+    },
+    {
+     "prompt_id": "p034",
+     "position": 24,
+     "token_a": " help",
+     "token_b": " identify",
+     "margin_a": 0.0084763765335083,
+     "shift": 0.05904209613800049
+    },
+    {
+     "prompt_id": "p036",
+     "position": 25,
+     "token_a": " to",
+     "token_b": ".",
+     "margin_a": 0.03558349609375,
+     "shift": 0.06838035583496094
+    },
+    {
+     "prompt_id": "p038",
+     "position": 45,
+     "token_a": " similar",
+     "token_b": " a",
+     "margin_a": 0.030717849731445312,
+     "shift": 0.1883525848388672
+    },
+    {
+     "prompt_id": "p040",
+     "position": 8,
+     "token_a": " an",
+     "token_b": " a",
+     "margin_a": 0.08365440368652344,
+     "shift": 0.1859130859375
+    },
+    {
+     "prompt_id": "p042",
+     "position": 8,
+     "token_a": " exposing",
+     "token_b": " stimulating",
+     "margin_a": 0.10412025451660156,
+     "shift": 0.11104762554168701
+    },
+    {
+     "prompt_id": "p044",
+     "position": 8,
+     "token_a": " of",
+     "token_b": " data",
+     "margin_a": 0.09791183471679688,
+     "shift": 0.34866905212402344
+    },
+    {
+     "prompt_id": "p046",
+     "position": 12,
+     "token_a": " There",
+     "token_b": " Here",
+     "margin_a": 0.14233970642089844,
+     "shift": 0.184783935546875
+    },
+    {
+     "prompt_id": "p048",
+     "position": 17,
+     "token_a": " assumes",
+     "token_b": " takes",
+     "margin_a": 0.07262217998504639,
+     "shift": 0.10497653484344482
+    },
+    {
+     "prompt_id": "p052",
+     "position": 113,
+     "token_a": " by",
+     "token_b": ".",
+     "margin_a": 0.2224024534225464,
+     "shift": 0.24401456117630005
+    },
+    {
+     "prompt_id": "p054",
+     "position": 18,
+     "token_a": " for",
+     "token_b": " in",
+     "margin_a": 0.07331836223602295,
+     "shift": 0.12458598613739014
+    },
+    {
+     "prompt_id": "p058",
+     "position": 14,
+     "token_a": " a",
+     "token_b": " an",
+     "margin_a": 0.0405845046043396,
+     "shift": 0.07511705160140991
+    }
+   ]
+  },
+  "first request under load": {
+   "prompts": 30,
+   "identical_outputs": 21,
+   "positions": 2790,
+   "argmax_agreement": 0.9967741935483871,
+   "max_logprob_diff": 0.6559147834777832,
+   "kl_p50": 0.0,
+   "kl_p99": 0.004953067800891016,
+   "drift_p50": 0.0,
+   "drift_p99": 0.23733869846910238,
+   "forks": 9,
+   "fork_shift_p50": 0.1962471604347229,
+   "fork_position_p50": 38,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "drift",
+   "forks_detail": [
+    {
+     "prompt_id": "p007",
+     "position": 3,
+     "token_a": " descriptive",
+     "token_b": " clear",
+     "margin_a": 0.1476384401321411,
+     "shift": 0.2331066131591797
+    },
+    {
+     "prompt_id": "p009",
+     "position": 71,
+     "token_a": " sends",
+     "token_b": " then",
+     "margin_a": 0.10390663146972656,
+     "shift": 0.15950781106948853
+    },
+    {
+     "prompt_id": "p015",
+     "position": 2,
+     "token_a": "'s",
+     "token_b": " rain",
+     "margin_a": 0.00360870361328125,
+     "shift": 0.1962471604347229
+    },
+    {
+     "prompt_id": "p019",
+     "position": 5,
+     "token_a": " situation",
+     "token_b": " problem",
+     "margin_a": 0.059600830078125,
+     "shift": 0.25240135192871094
+    },
+    {
+     "prompt_id": "p023",
+     "position": 78,
+     "token_a": ",",
+     "token_b": " sequence",
+     "margin_a": 0.0598222017288208,
+     "shift": 0.34190189838409424
+    },
+    {
+     "prompt_id": "p027",
+     "position": 114,
+     "token_a": " the",
+     "token_b": " negative",
+     "margin_a": 0.026060104370117188,
+     "shift": 0.09186172485351562
+    },
+    {
+     "prompt_id": "p039",
+     "position": 38,
+     "token_a": " reads",
+     "token_b": " first",
+     "margin_a": 0.18465805053710938,
+     "shift": 0.19896888732910156
+    },
+    {
+     "prompt_id": "p043",
+     "position": 0,
+     "token_a": "M",
+     "token_b": "To",
+     "margin_a": 0.07991981506347656,
+     "shift": 0.1043165922164917
+    },
+    {
+     "prompt_id": "p049",
+     "position": 41,
+     "token_a": " on",
+     "token_b": " in",
+     "margin_a": 0.017200469970703125,
+     "shift": 0.05854034423828125
+    }
+   ]
+  },
+  "repeat under load": {
+   "prompts": 60,
+   "identical_outputs": 60,
+   "positions": 7013,
+   "argmax_agreement": 1.0,
+   "max_logprob_diff": 0.0,
+   "kl_p50": 0.0,
+   "kl_p99": 0.0,
+   "drift_p50": 0.0,
+   "drift_p99": 0.0,
+   "forks": 0,
+   "fork_shift_p50": null,
+   "fork_position_p50": null,
+   "logprob_resolution": null,
+   "with_logprobs": true,
+   "cache_hit_ratio": null,
+   "scratch_hit_ratio": null,
+   "verdict": "identical",
+   "forks_detail": []
+  }
+ }
+}

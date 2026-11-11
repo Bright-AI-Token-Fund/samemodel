@@ -1,0 +1,22 @@
+A two-line change to llama.cpp (MIT License) at commit d5bbcd1f31dba754f716a26c3a4784502a6b9ede, release b12244.
+It makes the single-row Q6_K kernel for NEON with dotprod accumulate the way the four-row kernel does.
+Used here as an experiment, to show which lines the batch dependence comes from. Not submitted upstream.
+
+diff --git a/ggml/src/ggml-cpu/arch/arm/repack.cpp b/ggml/src/ggml-cpu/arch/arm/repack.cpp
+index b60eff9..f551d74 100644
+--- a/ggml/src/ggml-cpu/arch/arm/repack.cpp
++++ b/ggml/src/ggml-cpu/arch/arm/repack.cpp
+@@ -1551,11 +1551,8 @@ void ggml_gemv_q6_K_8x4_q8_K(int                        n,
+ 
+             // Apply superblock scale (no mins for q6_K)
+             // acc[g] has [c0, c1, c2, c3]
+-            float32x4_t w_0123 = vmulq_f32(vcvtq_f32_s32(acc[0]), sb_scale_0);
+-            float32x4_t w_4567 = vmulq_f32(vcvtq_f32_s32(acc[1]), sb_scale_1);
+-
+-            acc_f32[0] = vaddq_f32(acc_f32[0], w_0123);
+-            acc_f32[1] = vaddq_f32(acc_f32[1], w_4567);
++            acc_f32[0] = vmlaq_f32(acc_f32[0], vcvtq_f32_s32(acc[0]), sb_scale_0);
++            acc_f32[1] = vmlaq_f32(acc_f32[1], vcvtq_f32_s32(acc[1]), sb_scale_1);
+         }  // for b
+ 
+         int base = x * ncols_interleaved;
