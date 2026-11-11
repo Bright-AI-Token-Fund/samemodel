@@ -32,8 +32,13 @@ one of 60 prompts at temperature 0. This page finds out why.
 
 Qwen's documentation describes the procedure as a way to
 [improve the quality of quantised models](https://qwen.readthedocs.io/en/latest/quantization/llama.cpp.html#quantizing-the-gguf-with-awq-scale).
-The model cards of the GGUF repositories list the quantisation levels and do not say
-that the files were made this way (we read six of them on 2026-11-11).
+The model cards of the GGUF repositories do not mention it (we read six of them on
+2026-11-11). Some files hint at it in their metadata: 5 of the 17 rescaled files
+have `AWQ`, `Awq` or `AWInt4` in their `general.name`, and
+[others have noticed](#related-work) such labels. The other 12, among them every
+Qwen2.5 Instruct file from 0.5B to 32B, carry no such label and are rescaled all the
+same.
+
 Nothing here says the files are worse. It says they are a different set of weights
 from every other build of the same model, including at "fp16".
 
@@ -178,42 +183,42 @@ reads the GGUF header and the norm tensors with HTTP range requests, about 10 MB
 file, and compares them with the same tensors of the safetensors checkpoint. For files
 split into parts it reads the first part. `identical` means equal in every element.
 
-| file | norm tensors compared | identical | different | largest difference |
-| --- | --- | --- | --- | --- |
-| `Qwen/Qwen2.5-0.5B-Instruct-GGUF/qwen2.5-0.5b-instruct-q4_k_m.gguf` | 49 | 1 | 48 | 6.86 |
-| `Qwen/Qwen2.5-0.5B-Instruct-GGUF/qwen2.5-0.5b-instruct-q8_0.gguf` | 49 | 1 | 48 | 6.86 |
-| `Qwen/Qwen2.5-0.5B-Instruct-GGUF/qwen2.5-0.5b-instruct-fp16.gguf` | 49 | 1 | 48 | 6.86 |
-| `Qwen/Qwen2.5-1.5B-Instruct-GGUF/qwen2.5-1.5b-instruct-q4_k_m.gguf` | 57 | 1 | 56 | 4.68 |
-| `Qwen/Qwen2.5-3B-Instruct-GGUF/qwen2.5-3b-instruct-q4_k_m.gguf` | 73 | 1 | 72 | 26.5 |
-| `Qwen/Qwen2.5-7B-Instruct-GGUF/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf` | 47 | 0 | 47 | 4.81 |
-| `Qwen/Qwen2.5-7B-Instruct-GGUF/qwen2.5-7b-instruct-q8_0-00001-of-00003.gguf` | 27 | 0 | 27 | 4.81 |
-| `Qwen/Qwen2.5-7B-Instruct-GGUF/qwen2.5-7b-instruct-fp16-00001-of-00004.gguf` | 13 | 0 | 13 | 4.81 |
-| `Qwen/Qwen2.5-14B-Instruct-GGUF/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf` | 43 | 0 | 43 | 3.69 |
-| `Qwen/Qwen2.5-32B-Instruct-GGUF/qwen2.5-32b-instruct-q4_k_m-00001-of-00005.gguf` | 23 | 0 | 23 | 4.01 |
-| `Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf` | 57 | 1 | 56 | 5.48 |
-| `Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/qwen2.5-coder-7b-instruct-q4_k_m-00001-of-00002.gguf` | 47 | 0 | 47 | 4.39 |
-| `Qwen/Qwen2.5-Coder-32B-Instruct-GGUF/qwen2.5-coder-32b-instruct-q4_k_m-00001-of-00003.gguf` | 51 | 0 | 51 | 4.67 |
-| `Qwen/QwQ-32B-GGUF/qwq-32b-q4_k_m.gguf` | 129 | 1 | 128 | 4.19 |
-| `Qwen/Qwen3-4B-GGUF/Qwen3-4B-Q4_K_M.gguf` | 73 | 1 | 72 | 10.4 |
-| `Qwen/Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf` | 73 | 1 | 72 | 11.3 |
-| `Qwen/Qwen3-14B-GGUF/Qwen3-14B-Q4_K_M.gguf` | 81 | 1 | 80 | 11.6 |
-| `Qwen/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q8_0.gguf` | 57 | 57 | 0 | 0 |
-| `Qwen/Qwen3-1.7B-GGUF/Qwen3-1.7B-Q8_0.gguf` | 57 | 55 (+2 within rounding) | 0 | 2.24e-08 |
-| `Qwen/Qwen3-4B-GGUF/Qwen3-4B-Q8_0.gguf` | 73 | 73 | 0 | 0 |
-| `Qwen/Qwen2-7B-Instruct-GGUF/qwen2-7b-instruct-q4_k_m.gguf` | 57 | 57 | 0 | 0 |
-| `bartowski/Qwen2.5-0.5B-Instruct-GGUF/Qwen2.5-0.5B-Instruct-Q4_K_M.gguf` | 49 | 49 | 0 | 0 |
-| `bartowski/Qwen2.5-7B-Instruct-GGUF/Qwen2.5-7B-Instruct-Q4_K_M.gguf` | 57 | 57 | 0 | 0 |
-| `bartowski/Qwen2.5-Coder-7B-Instruct-GGUF/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf` | 57 | 57 | 0 | 0 |
-| `lmstudio-community/Qwen2.5-0.5B-Instruct-GGUF/Qwen2.5-0.5B-Instruct-Q4_K_M.gguf` | 49 | 49 | 0 | 0 |
-| `lmstudio-community/Qwen2.5-7B-Instruct-GGUF/Qwen2.5-7B-Instruct-Q4_K_M.gguf` | 57 | 57 | 0 | 0 |
+| file | `general.name` in the file | norm tensors compared | identical | different | largest difference |
+| --- | --- | --- | --- | --- | --- |
+| `Qwen/Qwen2.5-0.5B-Instruct-GGUF/qwen2.5-0.5b-instruct-q4_k_m.gguf` | qwen2.5-0.5b-instruct | 49 | 1 | 48 | 6.86 |
+| `Qwen/Qwen2.5-0.5B-Instruct-GGUF/qwen2.5-0.5b-instruct-q8_0.gguf` | qwen2.5-0.5b-instruct | 49 | 1 | 48 | 6.86 |
+| `Qwen/Qwen2.5-0.5B-Instruct-GGUF/qwen2.5-0.5b-instruct-fp16.gguf` | qwen2.5-0.5b-instruct | 49 | 1 | 48 | 6.86 |
+| `Qwen/Qwen2.5-1.5B-Instruct-GGUF/qwen2.5-1.5b-instruct-q4_k_m.gguf` | qwen2.5-1.5b-instruct | 57 | 1 | 56 | 4.68 |
+| `Qwen/Qwen2.5-3B-Instruct-GGUF/qwen2.5-3b-instruct-q4_k_m.gguf` | qwen2.5-3b-instruct | 73 | 1 | 72 | 26.5 |
+| `Qwen/Qwen2.5-7B-Instruct-GGUF/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf` | qwen2.5-7b-instruct | 47 | 0 | 47 | 4.81 |
+| `Qwen/Qwen2.5-7B-Instruct-GGUF/qwen2.5-7b-instruct-q8_0-00001-of-00003.gguf` | qwen2.5-7b-instruct | 27 | 0 | 27 | 4.81 |
+| `Qwen/Qwen2.5-7B-Instruct-GGUF/qwen2.5-7b-instruct-fp16-00001-of-00004.gguf` | qwen2.5-7b-instruct | 13 | 0 | 13 | 4.81 |
+| `Qwen/Qwen2.5-14B-Instruct-GGUF/qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf` | qwen2.5-14b-instruct | 43 | 0 | 43 | 3.69 |
+| `Qwen/Qwen2.5-32B-Instruct-GGUF/qwen2.5-32b-instruct-q4_k_m-00001-of-00005.gguf` | qwen2.5-32b-instruct | 23 | 0 | 23 | 4.01 |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf` | Qwen2.5 Coder 1.5B Instruct GGUF | 57 | 1 | 56 | 5.48 |
+| `Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/qwen2.5-coder-7b-instruct-q4_k_m-00001-of-00002.gguf` | Qwen2.5 Coder 7B Instruct GGUF | 47 | 0 | 47 | 4.39 |
+| `Qwen/Qwen2.5-Coder-32B-Instruct-GGUF/qwen2.5-coder-32b-instruct-q4_k_m-00001-of-00003.gguf` | Qwen2.5 Coder 32B Instruct AWQ | 51 | 0 | 51 | 4.67 |
+| `Qwen/QwQ-32B-GGUF/qwq-32b-q4_k_m.gguf` | Tmp_Quanted_Model AWInt4 Groupsize128 | 129 | 1 | 128 | 4.19 |
+| `Qwen/Qwen3-4B-GGUF/Qwen3-4B-Q4_K_M.gguf` | Qwen3 4B Instruct Awq | 73 | 1 | 72 | 10.4 |
+| `Qwen/Qwen3-8B-GGUF/Qwen3-8B-Q4_K_M.gguf` | Qwen3 8B Awq Compatible Instruct | 73 | 1 | 72 | 11.3 |
+| `Qwen/Qwen3-14B-GGUF/Qwen3-14B-Q4_K_M.gguf` | Qwen3 14B Awq Compatible Instruct | 81 | 1 | 80 | 11.6 |
+| `Qwen/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q8_0.gguf` | Qwen3 0.6B Instruct | 57 | 57 | 0 | 0 |
+| `Qwen/Qwen3-1.7B-GGUF/Qwen3-1.7B-Q8_0.gguf` | Qwen3 1.7B Instruct | 57 | 55 (+2 within rounding) | 0 | 2.24e-08 |
+| `Qwen/Qwen3-4B-GGUF/Qwen3-4B-Q8_0.gguf` | Qwen3 4B Instruct | 73 | 73 | 0 | 0 |
+| `Qwen/Qwen2-7B-Instruct-GGUF/qwen2-7b-instruct-q4_k_m.gguf` | qwen2-7b-instruct | 57 | 57 | 0 | 0 |
+| `bartowski/Qwen2.5-0.5B-Instruct-GGUF/Qwen2.5-0.5B-Instruct-Q4_K_M.gguf` | Qwen2.5 0.5B Instruct | 49 | 49 | 0 | 0 |
+| `bartowski/Qwen2.5-7B-Instruct-GGUF/Qwen2.5-7B-Instruct-Q4_K_M.gguf` | Qwen2.5 7B Instruct | 57 | 57 | 0 | 0 |
+| `bartowski/Qwen2.5-Coder-7B-Instruct-GGUF/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf` | Qwen2.5 Coder 7B Instruct | 57 | 57 | 0 | 0 |
+| `lmstudio-community/Qwen2.5-0.5B-Instruct-GGUF/Qwen2.5-0.5B-Instruct-Q4_K_M.gguf` | Qwen2.5 0.5B Instruct | 49 | 49 | 0 | 0 |
+| `lmstudio-community/Qwen2.5-7B-Instruct-GGUF/Qwen2.5-7B-Instruct-Q4_K_M.gguf` | Qwen2.5 7B Instruct | 57 | 57 | 0 | 0 |
 
 Ollama's library files were read from its registry the same way:
 
-| file | norm tensors compared | identical | different | largest difference |
-| --- | --- | --- | --- | --- |
-| `library/qwen2.5:0.5b (sha256:c5396e06af29)` | 49 | 49 | 0 | 0 |
-| `library/qwen2.5:7b (sha256:2bada8a74506)` | 57 | 57 | 0 | 0 |
-| `library/qwen2.5-coder:7b (sha256:60e05f210007)` | 57 | 57 | 0 | 0 |
+| file | `general.name` in the file | norm tensors compared | identical | different | largest difference |
+| --- | --- | --- | --- | --- | --- |
+| `library/qwen2.5:0.5b (sha256:c5396e06af29)` | Qwen2.5 0.5B Instruct | 49 | 49 | 0 | 0 |
+| `library/qwen2.5:7b (sha256:2bada8a74506)` | Qwen2.5 7B Instruct | 57 | 57 | 0 | 0 |
+| `library/qwen2.5-coder:7b (sha256:60e05f210007)` | Qwen2.5 Coder 7B Instruct | 57 | 57 | 0 | 0 |
 
 Three things stand out:
 
@@ -223,6 +228,9 @@ Three things stand out:
   weights.
 - The third-party builds and Ollama's are plain conversions, so they agree with the
   checkpoint and differ from Qwen's files.
+- The name in the metadata is not a reliable sign. Five of the rescaled files point
+  to AWQ in their `general.name` (QwQ-32B's reads `Tmp_Quanted_Model AWInt4
+  Groupsize128`); twelve do not. No file whose norm weights match the checkpoint does.
 
 For every file except the 0.5B ones this check shows the rescale only. Whether the
 larger files were clipped as well, and how far that moves their output, we have not
@@ -242,6 +250,26 @@ measured: it takes the full files and a full-precision reference.
   the same file the two agreed to rounding noise here.
 - **To check a file you already have,** compare its norm weights with the checkpoint.
   It takes seconds and it is exact.
+
+## Related work
+
+- Qwen's documentation has a section on
+  [quantising the GGUF with AWQ scale](https://qwen.readthedocs.io/en/latest/quantization/llama.cpp.html#quantizing-the-gguf-with-awq-scale),
+  presented as an option for people who quantise the models themselves.
+- In a [discussion on bartowski's Qwen2.5-Coder-32B repository](https://huggingface.co/bartowski/Qwen2.5-Coder-32B-Instruct-GGUF/discussions/3)
+  (February 2025) a user notes that the models in the official repository "are
+  quantized using AWQ", and bartowski answers that his are not.
+- [Broken on Arrival](https://arxiv.org/abs/2609.05881) (Patodiya, 2026) and the
+  [Ollama issue](https://github.com/ollama/ollama/issues/18252) it grew out of show
+  that four low-bit `qwen2.5-coder:3b` tags of Ollama's library match a plain rebuild
+  from the checkpoint in all 434 tensors, and note that Qwen's own Coder-3B files are
+  labelled `Instruct-AWQ` and store a separate output head.
+
+What this page adds: a comparison of the weights themselves instead of the labels
+(the rescale, the clip and its structure); that files without any AWQ label are
+rescaled too, the fp16 ones included; a measurement of what the clip does to the
+output, with an intervention that isolates it; and a check that works on a remote
+file.
 
 ## Reproduce
 
@@ -280,8 +308,8 @@ its path.
   rescaled. It does not show that they were clipped.
 - For split files only the first part was read: 23 to 57 norm tensors, not all of them.
 - That the files were made with AutoAWQ is an inference from the structure of the
-  weights and from Qwen's documentation. We found no statement from Qwen about how
-  the published files were made.
+  weights, from Qwen's documentation and from the names in some files' metadata. We
+  found no statement from Qwen about how the published files were made.
 - The checkpoint was read from mlx-community's bf16 copy for the matrices. A sample of
   seven tensors was compared with Qwen's own file and is identical
   ([`data/checkpoint_copy_check.txt`](data/checkpoint_copy_check.txt)); the norm
