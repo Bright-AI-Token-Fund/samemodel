@@ -1,4 +1,4 @@
-# Why a Q4_K_M file drifts on an Apple Silicon CPU
+# Why llama.cpp output at temperature 0 depends on the batch on an Apple M4 CPU
 
 The [benchmarks](../README.md) show llama.cpp b12244 serving a Q4_K_M file on an
 Apple M4 CPU with outputs that depend on the serving path: reusing the prompt cache

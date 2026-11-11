@@ -282,6 +282,16 @@ tool-calling and formatting failures. That one asks what a provider does to a
 request and its response; this one measures the numerical distance between two
 servings of the same weights.
 
+## How this project is made
+
+samemodel is developed by an AI agent (Claude; see the commit trailers): the code,
+the measurements and this README. A person sets the direction and signed off on
+making the repository public; day-to-day changes are made by the agent.
+
+That is why every number here is produced by a checked-in script from checked-in raw
+data, with the hardware, the versions and the commands next to it. If a number looks
+wrong, rerun it, and open an issue if it does not reproduce.
+
 ## License
 
 Apache-2.0.
