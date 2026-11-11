@@ -12,6 +12,8 @@ not explained by that rescale.
 With --unclip COPY, COPY (a copy of the GGUF file) is patched in place so that every matrix is
 exactly the rescaled checkpoint: whatever the file contains beyond a rescale is removed.
 
+Split files: give the parts and the shards as comma-separated lists.
+
 Usage: rescale_check.py full-precision.gguf model.safetensors [--unclip COPY.gguf]
 """
 import sys
@@ -50,7 +52,7 @@ def rebuild(g, s, blk, kind):
 
 
 def main(gguf_path, ckpt_path, unclip_path=None):
-    g, s = GGUF(gguf_path), Safetensors(ckpt_path)
+    g, s = GGUF(gguf_path.split(",")), Safetensors(ckpt_path.split(","))
     n_blk = 1 + max(int(n.split(".")[1]) for n in g.info if n.startswith("blk."))
     out = open(unclip_path, "r+b") if unclip_path else None
     patched = GGUF(unclip_path) if unclip_path else None
@@ -77,10 +79,9 @@ def main(gguf_path, ckpt_path, unclip_path=None):
             r["groups"] += int(several.sum())
             r["one_ceiling"] += int((several & flat).sum())
             if out:
-                dims, t, off = patched.info[f"blk.{blk}.{kind}.weight"]
-                if t != 1:
+                if patched.info[f"blk.{blk}.{kind}.weight"][1] != 1:
                     raise SystemExit("--unclip expects F16 tensors")
-                out.seek(patched.base + off)
+                out.seek(patched.offset(f"blk.{blk}.{kind}.weight")[1])
                 out.write(target.astype("<f2").tobytes())
     print(f"{n_blk} blocks. Relative differences are Frobenius norms, |file - reference| / |reference|.\n")
     print("layer        file vs checkpoint   file vs rescaled checkpoint   weights not explained   "

@@ -64,42 +64,62 @@ def decode(raw, dtype):
 
 
 class GGUF:
-    def __init__(self, path):
-        self.path = path
-        self.f = open(path, "rb")
-        self.meta, infos, self.base = read_gguf_header(self.f)
-        self.info = {name: (dims, t, off) for name, dims, t, off in infos}
-        order = sorted(infos, key=lambda x: x[3])
-        size = os.path.getsize(path) - self.base
-        ends = [x[3] for x in order[1:]] + [size]
-        self.nbytes = {x[0]: end - x[3] for x, end in zip(order, ends, strict=True)}
+    """One GGUF file, or the parts of a split one (pass a list of paths)."""
+
+    def __init__(self, paths):
+        self.paths = [paths] if isinstance(paths, str) else list(paths)
+        self.meta, self.info, self.nbytes, self._where = {}, {}, {}, {}
+        for path in self.paths:
+            f = open(path, "rb")
+            meta, infos, base = read_gguf_header(f)
+            self.meta = self.meta or meta
+            order = sorted(infos, key=lambda x: x[3])
+            ends = [x[3] for x in order[1:]] + [os.path.getsize(path) - base]
+            for (name, dims, t, off), end in zip(order, ends, strict=True):
+                self.info[name] = (dims, t, off)
+                self.nbytes[name] = end - off
+                self._where[name] = (f, base)
 
     def type_name(self, name):
         return GGML_TYPES.get(self.info[name][1], str(self.info[name][1]))
 
+    def offset(self, name):
+        """(open file, absolute offset) of a tensor's data."""
+        f, base = self._where[name]
+        return f, base + self.info[name][2]
+
     def raw(self, name):
-        self.f.seek(self.base + self.info[name][2])
-        return self.f.read(self.nbytes[name])
+        f, pos = self.offset(name)
+        f.seek(pos)
+        return f.read(self.nbytes[name])
 
     def get(self, name):
         """An unquantised tensor as float64, in [out, in] layout."""
-        dims, t, off = self.info[name]
+        dims, t, _off = self.info[name]
         if t not in (0, 1):
             raise ValueError(f"{name} is {self.type_name(name)}, not F32 or F16")
-        self.f.seek(self.base + off)
+        f, pos = self.offset(name)
+        f.seek(pos)
         n = int(np.prod(dims))
-        return decode(self.f.read(n * (4 if t == 0 else 2)), "F32" if t == 0 else "F16").reshape(dims[::-1])
+        return decode(f.read(n * (4 if t == 0 else 2)), "F32" if t == 0 else "F16").reshape(dims[::-1])
 
 
 class Safetensors:
-    def __init__(self, path):
-        self.f = open(path, "rb")
-        n = struct.unpack("<Q", self.f.read(8))[0]
-        self.header = {k: v for k, v in json.loads(self.f.read(n)).items() if k != "__metadata__"}
-        self.base = 8 + n
+    """One safetensors file, or the shards of a checkpoint (pass a list of paths)."""
+
+    def __init__(self, paths):
+        self.header, self._where = {}, {}
+        for path in [paths] if isinstance(paths, str) else list(paths):
+            f = open(path, "rb")
+            n = struct.unpack("<Q", f.read(8))[0]
+            for k, v in json.loads(f.read(n)).items():
+                if k != "__metadata__":
+                    self.header[k] = v
+                    self._where[k] = (f, 8 + n)
 
     def get(self, name):
         v = self.header[name]
+        f, base = self._where[name]
         start, end = v["data_offsets"]
-        self.f.seek(self.base + start)
-        return decode(self.f.read(end - start), v["dtype"]).reshape(v["shape"])
+        f.seek(base + start)
+        return decode(f.read(end - start), v["dtype"]).reshape(v["shape"])

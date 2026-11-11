@@ -194,8 +194,9 @@ llama.cpp serving the Q4_K_M file from Qwen's own GGUF repository and Ollama ser
 the same file, the two agree to rounding noise. What differs is the file: most GGUF
 files in Qwen's repositories, the fp16 ones included, hold a rescaled copy of the
 released weights, while Ollama's, bartowski's and lmstudio-community's are plain
-conversions. In the model we took apart, 1% of the weights are clipped as well, and
-that alone puts Qwen's fp16 file 0.25 nat away from the checkpoint. The measurements, and a check that compares a file's norm weights
+conversions. In the two files we took apart, 0.5B and 7B at fp16, 1% of the weights
+are clipped as well; on the 0.5B model that alone puts Qwen's fp16 file 0.25 nat away
+from the checkpoint. The measurements, and a check that compares a file's norm weights
 with the checkpoint without downloading either, are in
 [`benchmarks/qwen-gguf/`](benchmarks/qwen-gguf/README.md).
 

@@ -28,7 +28,9 @@ one of 60 prompts at temperature 0. This page finds out why.
    downloading a file. They differ from the checkpoint in 17 of the 21 official files
    we checked: every Qwen2.5 file from 0.5B to 32B, the Coder models, QwQ-32B, and the
    Q4_K_M files of Qwen3. They are identical in the Q8_0 files of Qwen3, in Qwen's
-   Qwen2-7B file, and in every build by Ollama, bartowski and lmstudio-community.
+   Qwen2-7B file, and in every build by Ollama, bartowski and lmstudio-community. The
+   one larger file we downloaded in full, Qwen2.5-7B at fp16, is clipped the same way:
+   1.07% of its matrix weights.
 
 Qwen's documentation describes the procedure as a way to
 [improve the quality of quantised models](https://qwen.readthedocs.io/en/latest/quantization/llama.cpp.html#quantizing-the-gguf-with-awq-scale).
@@ -232,9 +234,29 @@ Three things stand out:
   to AWQ in their `general.name` (QwQ-32B's reads `Tmp_Quanted_Model AWInt4
   Groupsize128`); twelve do not. No file whose norm weights match the checkpoint does.
 
-For every file except the 0.5B ones this check shows the rescale only. Whether the
-larger files were clipped as well, and how far that moves their output, we have not
-measured: it takes the full files and a full-precision reference.
+This check shows the rescale only. To see whether a larger file is clipped as well we
+downloaded one in full: the four parts of `qwen2.5-7b-instruct-fp16` and the checkpoint
+`Qwen/Qwen2.5-7B-Instruct`, 15 GB each, and ran `rescale_check.py` over all 28 blocks
+([output](data/rescale_check.qwen2.5-7b-fp16.txt)):
+
+| layer | file vs rescaled checkpoint | weights the rescale does not explain | of those, smaller in magnitude |
+| --- | --- | --- | --- |
+| `attn_q` | 0.0003 | 6,728 (0.002%) | |
+| `attn_k` | 0.0003 | 1,472 (0.003%) | |
+| `attn_v` | 0.048 | 503,155 (0.98%) | 100% |
+| `ffn_gate` | 0.035 | 19,255,503 (1.01%) | 100% |
+| `ffn_up` | 0.048 | 22,358,320 (1.18%) | 100% |
+| `attn_output` | 0.051 | 5,096,692 (1.42%) | 100% |
+| `ffn_down` | 0.077 | 22,575,427 (1.19%) | 100% |
+
+It is the same picture as the 0.5B file. The query and key projections are the
+checkpoint's, rescaled (we did not examine the few thousand weights that differ
+there). In the other five kinds of matrix 69,789,097 of 6,525,288,448 weights are
+smaller than the rescaled checkpoint value, 1.07%, and in 99.93% of the groups of 128
+input channels that hold two or more of them they share one ceiling.
+
+How far the clip moves the output of the 7B model we have not measured. That takes a
+full-precision run of both files. For the other files the norm check is all we have.
 
 ## What this means in practice
 
@@ -280,7 +302,7 @@ cd benchmarks/qwen-gguf
 # which tensors differ between two files
 python tensor_diff.py qwen2.5-0.5b-instruct-q4_k_m.gguf ollama-qwen2.5-0.5b.gguf
 
-# rescale and clip, against the checkpoint
+# rescale and clip, against the checkpoint (for split files: comma-separated parts and shards)
 python rescale_check.py qwen2.5-0.5b-instruct-fp16.gguf model.safetensors
 
 # undo the clip in a copy
@@ -303,9 +325,10 @@ its path.
 
 - The distances are from one model of 0.5B parameters, one machine and one backend.
   Small models react more to a perturbation than large ones. Do not carry the numbers
-  over to the 7B or 32B files.
-- For the larger files we compared the norm weights only. That shows they were
-  rescaled. It does not show that they were clipped.
+  over to the 7B or 32B files: for 7B we showed that the weights are clipped, not what
+  that does to the output.
+- For the files other than the 0.5B and the 7B fp16 ones we compared the norm weights
+  only. That shows they were rescaled. It does not show that they were clipped.
 - For split files only the first part was read: 23 to 57 norm tensors, not all of them.
 - That the files were made with AutoAWQ is an inference from the structure of the
   weights, from Qwen's documentation and from the names in some files' metadata. We
@@ -326,7 +349,8 @@ its path.
   `.via-ollama` suffix means the file was served by Ollama instead of llama.cpp.
 - [`data/distances.txt`](data/distances.txt): output of `distances.sh`.
 - `data/tensor_diff.q4_k_m.txt`, `data/rescale_check.*.txt`,
-  `data/checkpoint_copy_check.txt`: outputs of the scripts of the same names.
+  `data/checkpoint_copy_check.txt`: outputs of the scripts of the same names. The 7B
+  check ran on a Xeon server, CPU only, and took nine minutes.
 - [`data/scan.jsonl`](data/scan.jsonl) and [`data/scan.ollama.jsonl`](data/scan.ollama.jsonl):
   one line per file checked remotely, 2026-11-11. [`targets.txt`](targets.txt) lists the
   repositories; `scan_table.py` prints the tables above.
