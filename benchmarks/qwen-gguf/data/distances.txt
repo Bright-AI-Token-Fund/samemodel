@@ -1,0 +1,13 @@
+                                                              same   argmax  drift50  drift99     KL99  forks  verdict
+# the same file in llama.cpp b12244 and in Ollama 0.40.16
+checkpoint-f16             -> checkpoint-f16.via-ollama       51/60    99.94%   0.0016   0.0101   0.0000      4  noise
+qwen-gguf-q4_k_m           -> qwen-gguf-q4_k_m.via-ollama     50/60    99.96%   0.0018   0.0129   0.0000      3  noise
+ollama-q4_k_m              -> ollama-q4_k_m.via-ollama        51/60    99.97%   0.0016   0.0110   0.0000      2  noise
+# different files in llama.cpp b12244
+checkpoint-f16             -> qwen-gguf-fp16                   0/60    95.76%   0.2546   1.3981   0.0896     60  different
+checkpoint-f16             -> qwen-gguf-fp16-unclipped        55/60    99.93%   0.0026   0.0153   0.0000      5  noise
+checkpoint-f16             -> qwen-gguf-q4_k_m                 0/60    93.05%   0.4121   2.0855   0.2490     60  different
+checkpoint-f16             -> ollama-q4_k_m                    0/60    90.81%   0.4120   2.0885   0.2572     60  different
+qwen-gguf-fp16             -> qwen-gguf-q4_k_m                 0/60    93.67%   0.3336   1.5547   0.1644     60  different
+qwen-gguf-fp16             -> ollama-q4_k_m                    0/60    90.83%   0.4174   1.8206   0.2605     60  different
+qwen-gguf-q4_k_m           -> ollama-q4_k_m                    0/60    89.05%   0.5164   2.3998   0.3687     60  different

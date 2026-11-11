@@ -1,0 +1,11 @@
+24 blocks. Relative differences are Frobenius norms, |file - reference| / |reference|.
+
+layer        file vs checkpoint   file vs rescaled checkpoint   weights not explained   of those, smaller   groups where they share one ceiling
+             (median over blocks) (largest over blocks)         by the rescale (>1%)    in magnitude
+attn_q              0.367                2.1e-04                    0 = 0.00%              -      -
+attn_k              0.370                2.2e-04                    0 = 0.00%              -      -
+attn_v              0.381                2.1e-04                    0 = 0.00%              -      -
+ffn_gate            0.305                2.1e-04                    0 = 0.00%              -      -
+ffn_up              0.277                2.1e-04                    0 = 0.00%              -      -
+attn_output         0.000                3.8e-08                    0 = 0.00%              -      -
+ffn_down            0.333                2.2e-04                    0 = 0.00%              -      -

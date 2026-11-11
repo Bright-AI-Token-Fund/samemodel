@@ -1,0 +1,9 @@
+only in a: ['output.weight']
+only in b: []
+ 132  a=Q5_0  b=Q5_0  different bytes  e.g. blk.N.attn_k.weight
+  72  a=F32   b=F32   same bytes       e.g. blk.N.attn_k.bias
+  49  a=F32   b=F32   different bytes  e.g. blk.N.attn_norm.weight
+  12  a=Q8_0  b=Q8_0  different bytes  e.g. blk.N.attn_v.weight
+  12  a=Q6_K  b=Q6_K  different bytes  e.g. blk.N.ffn_down.weight
+  12  a=Q4_K  b=Q4_K  different bytes  e.g. blk.N.ffn_down.weight
+   1  a=Q5_0  b=Q8_0  different bytes  e.g. token_embd.weight

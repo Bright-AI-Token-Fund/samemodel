@@ -1,0 +1,8 @@
+tensors: local 290, published 290; published dtypes ['BF16']
+model.layers.0.self_attn.q_proj.weight             max |local - published| = 0.0e+00
+model.layers.11.self_attn.v_proj.weight            max |local - published| = 0.0e+00
+model.layers.23.self_attn.o_proj.weight            max |local - published| = 0.0e+00
+model.layers.11.input_layernorm.weight             max |local - published| = 0.0e+00
+model.layers.23.post_attention_layernorm.weight    max |local - published| = 0.0e+00
+model.norm.weight                                  max |local - published| = 0.0e+00
+model.layers.5.self_attn.k_proj.bias               max |local - published| = 0.0e+00

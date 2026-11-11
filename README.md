@@ -187,6 +187,18 @@ same machine with the same batching is identical on all three checks. For a 1.5B
 model of the same family, where the first cause does not apply, the two lines alone
 are enough.
 
+### Before comparing two runtimes, compare the files
+
+llama.cpp serving the Q4_K_M file from Qwen's own GGUF repository and Ollama serving
+`qwen2.5:0.5b` do not give one matching answer in 60, and the drift is 0.52 nat. Served
+the same file, the two agree to rounding noise. What differs is the file: most GGUF
+files in Qwen's repositories, the fp16 ones included, hold a rescaled and clipped copy
+of the released weights, while Ollama's, bartowski's and lmstudio-community's are
+plain conversions. On this model the clip alone puts Qwen's fp16 file 0.25 nat away
+from the checkpoint. The measurements, and a check that compares a file's norm weights
+with the checkpoint without downloading either, are in
+[`benchmarks/qwen-gguf/`](benchmarks/qwen-gguf/README.md).
+
 ## Reading the output
 
 | column | meaning |
